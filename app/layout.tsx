@@ -39,8 +39,16 @@ export async function generateMetadata(): Promise<Metadata> {
   const ogImage = settings?.ogImage?.asset
     ? urlFor(settings.ogImage).width(1200).height(630).fit("crop").url()
     : siteConfig.ogImage;
+  const logoUrl = settings?.logo?.asset
+    ? urlFor(settings.logo).url()
+    : "/favicon.svg";
 
   return {
+    icons: {
+      icon: logoUrl,
+      apple: logoUrl,
+      shortcut: logoUrl,
+    },
     title: {
       default: siteTitle,
       template: `%s - ${siteTitle}`,
@@ -85,10 +93,6 @@ export async function generateMetadata(): Promise<Metadata> {
     robots: {
       index: true,
       follow: true,
-    },
-    icons: {
-      icon: "/favicon.svg",
-      apple: "/apple-touch-icon.png",
     },
   };
 }
