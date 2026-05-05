@@ -1,5 +1,6 @@
-import {client} from '@/sanity/lib/client'
 import {defineEnableDraftMode} from 'next-sanity/draft-mode'
+
+import {client} from '@/sanity/lib/client'
 
 const token = process.env.SANITY_API_READ_TOKEN
 

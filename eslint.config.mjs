@@ -18,7 +18,7 @@ const eslintConfig = [
       "simple-import-sort/imports": "error",
       "unused-imports/no-unused-imports": "error",
       "unused-imports/no-unused-vars": [
-        "warn",
+        "error",
         {
           args: "after-used",
           argsIgnorePattern: "^_",
@@ -26,6 +26,7 @@ const eslintConfig = [
           varsIgnorePattern: "^_",
         },
       ],
+      "@typescript-eslint/no-unused-vars": "off",
     },
   },
 ];

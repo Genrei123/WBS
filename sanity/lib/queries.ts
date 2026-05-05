@@ -149,6 +149,33 @@ export const pageBySlugQuery = groq`
           asset->{_id, url},
           alt
         },
+        images[]{
+          _key,
+          title,
+          description,
+          image{
+            asset->{_id, url},
+            alt,
+            hotspot,
+            crop
+          }
+        },
+        models[]{
+          _key,
+          title,
+          description,
+          thumbnail{
+            asset->{_id, url},
+            alt,
+            hotspot,
+            crop
+          },
+          file{
+            asset->{_id, url},
+            originalFilename,
+            mimeType
+          }
+        },
         description,
         link{
           linkType,

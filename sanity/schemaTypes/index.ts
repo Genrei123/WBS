@@ -11,10 +11,12 @@ import {heroSectionType} from './objects/heroSectionType'
 import {imageSectionType} from './objects/imageSectionType'
 import {navbarSettingsType} from './objects/navbarSettingsType'
 import {pageType} from './objects/pageType'
+import { pdfAutomation } from './objects/pdfAutomation'
 import {postType} from './objects/postType'
 import {richTextSectionType} from './objects/richTextSectionType'
 import {siteSettingsType} from './objects/siteSettingsType'
 import {spacerSectionType} from './objects/spacerSectionType'
+import { graphicDesign } from './objects/graphicDesign'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -33,5 +35,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     siteSettingsType,
     navbarSettingsType,
     footerSettingsType,
+    pdfAutomation,
+    graphicDesign
   ],
 }
