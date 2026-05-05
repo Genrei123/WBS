@@ -264,7 +264,7 @@ export function PageBuilder({
           case "richTextSection":
             return (
               <section key={key} data-sanity={sectionAttr} className={cn(baseSectionClass, "py-20")}>
-                <div className="mx-auto max-w-3xl space-y-4">
+                <div className=" max-w-3xl space-y-4">
                   {section.eyebrow ? (
                     <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase">{section.eyebrow}</p>
                   ) : null}

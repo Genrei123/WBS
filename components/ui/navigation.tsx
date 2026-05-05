@@ -180,6 +180,7 @@ export default function Navigation({
                               key={dropItem.text}
                               href={dropItem.href}
                               title={dropItem.text}
+                              
                             >
                               {/* No description for featured variant */}
                             </ListItem>
