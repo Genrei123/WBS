@@ -261,10 +261,23 @@ export function PageBuilder({
               />
             );
 
-          case "richTextSection":
+          case "richTextSection": {
+            const align = section.textAlign || "left";
+            let alignClass = "text-left mr-auto";
+            if (align === "center") alignClass = "text-center mx-auto";
+            if (align === "right") alignClass = "text-right ml-auto";
+
             return (
-              <section key={key} data-sanity={sectionAttr} className={cn(baseSectionClass, "py-20")}>
-                <div className=" max-w-3xl space-y-4">
+              <section 
+                key={key} 
+                data-sanity={sectionAttr} 
+                className={baseSectionClass}
+                style={{
+                  paddingTop: section.paddingTop ?? 80,
+                  paddingBottom: section.paddingBottom ?? 80,
+                }}
+              >
+                <div className={cn("max-w-3xl space-y-4", alignClass)}>
                   {section.eyebrow ? (
                     <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase">{section.eyebrow}</p>
                   ) : null}
@@ -275,6 +288,7 @@ export function PageBuilder({
                 </div>
               </section>
             );
+          }
 
           case "ctaSection":
             return (

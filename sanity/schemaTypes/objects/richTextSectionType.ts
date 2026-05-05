@@ -22,6 +22,32 @@ export const richTextSectionType = defineType({
       title: 'Body',
       type: 'blockContent',
     }),
+    defineField({
+      name: 'textAlign',
+      title: 'Text Alignment',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Left', value: 'left'},
+          {title: 'Center', value: 'center'},
+          {title: 'Right', value: 'right'},
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'left',
+    }),
+    defineField({
+      name: 'paddingTop',
+      title: 'Padding Top (px)',
+      type: 'number',
+      initialValue: 80,
+    }),
+    defineField({
+      name: 'paddingBottom',
+      title: 'Padding Bottom (px)',
+      type: 'number',
+      initialValue: 80,
+    }),
   ],
   preview: {
     select: {
