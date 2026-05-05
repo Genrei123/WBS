@@ -407,7 +407,6 @@ export function PageBuilder({
             const imgSrcDark = section.imageDark?.asset ? urlFor(section.imageDark).width(1200).fit("max").url() : null;
 
             let alignClasses = "items-center text-center";
-            let flexClasses = "flex-col";
             if (align === "left") {
               alignClasses = "items-start text-left";
             } else if (align === "right") {
