@@ -7,6 +7,7 @@ import {categoryType} from './objects/categoryType'
 import {containerSectionType} from './objects/containerSectionType'
 import {ctaSectionType} from './objects/ctaSectionType'
 import {footerSettingsType} from './objects/footerSettingsType'
+import { graphicDesign } from './objects/graphicDesign'
 import {heroSectionType} from './objects/heroSectionType'
 import {imageSectionType} from './objects/imageSectionType'
 import {navbarSettingsType} from './objects/navbarSettingsType'
@@ -16,7 +17,6 @@ import {postType} from './objects/postType'
 import {richTextSectionType} from './objects/richTextSectionType'
 import {siteSettingsType} from './objects/siteSettingsType'
 import {spacerSectionType} from './objects/spacerSectionType'
-import { graphicDesign } from './objects/graphicDesign'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
