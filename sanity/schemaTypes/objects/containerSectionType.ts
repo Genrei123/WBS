@@ -101,6 +101,7 @@ export const containerSectionType = defineType({
         defineArrayMember({type: 'ctaSection'}),
         defineArrayMember({type: 'pdfAutomation'}),
         defineArrayMember({type: 'graphicDesign'}),
+        defineArrayMember({type: 'webDesign'}),
       ],
       description: 'Add items to be displayed inside this container',
     }),
