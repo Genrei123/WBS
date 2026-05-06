@@ -1,21 +1,22 @@
 "use client";
 
+import { PortableText } from "@portabletext/react";
 import { createDataAttribute } from "next-sanity";
 import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 import { urlFor } from "@/sanity/lib/image";
 
-import PDFAutomation from "../pdf-automation/default";
 import { GalleryViewer } from "../graphic-design/default";
 import WebDesignPage from "../web-design/default";
+import PDFAutomation from "../pdf-automation/default";
 
 type PageSection = {
   _key?: string;
   _type?: string;
   eyebrow?: string;
   title?: string;
-  body?: string;
+  body?: any;
   description?: string;
   primaryCtaLabel?: string;
   primaryCtaHref?: string;
@@ -292,7 +293,11 @@ export function PageBuilder({
                   {section.title ? (
                     <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">{section.title}</h2>
                   ) : null}
-                  {section.body ? <p className="text-muted-foreground leading-7">{section.body}</p> : null}
+                  {section.body ? (
+                    <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none text-muted-foreground">
+                      <PortableText value={section.body} />
+                    </div>
+                  ) : null}
                 </div>
               </section>
             );
@@ -309,7 +314,9 @@ export function PageBuilder({
                     <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{section.title}</h2>
                   ) : null}
                   {section.body ? (
-                    <p className="text-muted-foreground mx-auto mt-4 max-w-2xl leading-7">{section.body}</p>
+                    <div className="prose prose-sm md:prose-base dark:prose-invert mx-auto mt-4 max-w-2xl text-muted-foreground">
+                      <PortableText value={section.body} />
+                    </div>
                   ) : null}
                   <div className="mt-auto flex flex-wrap items-center justify-center gap-4 py-4">
                     {section.primaryCtaLabel && section.primaryCtaHref ? (
@@ -450,7 +457,9 @@ export function PageBuilder({
                       {section.title || "Add a title in Sanity"}
                     </h1>
                     {section.body ? (
-                      <p className="text-muted-foreground max-w-2xl text-lg leading-7">{section.body}</p>
+                      <div className="prose prose-sm md:prose-base dark:prose-invert max-w-2xl text-muted-foreground">
+                        <PortableText value={section.body} />
+                      </div>
                     ) : null}
                     <div
                       className={cn(
