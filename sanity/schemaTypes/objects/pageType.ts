@@ -47,6 +47,7 @@ export const pageType = defineType({
         defineArrayMember({type: 'containerSection'}),
         defineArrayMember({type: 'spacerSection'}),
         defineArrayMember({type: 'pdfAutomation'}),
+        defineArrayMember({type: 'headlessPageBuilderDemo'}),
         defineArrayMember({type: 'graphicDesign'}),
       ],
       description: 'Add and reorder the sections rendered on this page.',

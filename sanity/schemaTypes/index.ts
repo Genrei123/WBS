@@ -8,6 +8,7 @@ import {containerSectionType} from './objects/containerSectionType'
 import {ctaSectionType} from './objects/ctaSectionType'
 import {footerSettingsType} from './objects/footerSettingsType'
 import { graphicDesign } from './objects/graphicDesign'
+import {headlessPageBuilderDemo} from './objects/headlessPageBuilderDemo'
 import {heroSectionType} from './objects/heroSectionType'
 import {imageSectionType} from './objects/imageSectionType'
 import {navbarSettingsType} from './objects/navbarSettingsType'
@@ -36,6 +37,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     navbarSettingsType,
     footerSettingsType,
     pdfAutomation,
+    headlessPageBuilderDemo,
     graphicDesign
   ],
 }

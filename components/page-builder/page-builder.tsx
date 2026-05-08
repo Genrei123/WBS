@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { urlFor } from "@/sanity/lib/image";
 
 import { GalleryViewer } from "../graphic-design/default";
+import HeadlessPageBuilderDemo from "../headless-page-builder/default";
 import PDFAutomation from "../pdf-automation/default";
 
 type PageSection = {
@@ -508,6 +509,29 @@ export function PageBuilder({
                 className={cn(baseSectionClass, "flex min-h-[calc(100vh-8rem)] items-center")}
               >
                 <PDFAutomation />
+              </section>
+            );
+
+          case "headlessPageBuilderDemo":
+            return (
+              <section
+                key={key}
+                data-sanity={sectionAttr}
+                className={baseSectionClass}
+                style={{
+                  paddingTop: section.paddingTop ?? 96,
+                  paddingBottom: section.paddingBottom ?? 96,
+                }}
+              >
+                <HeadlessPageBuilderDemo
+                  eyebrow={section.eyebrow}
+                  title={section.title}
+                  description={section.description}
+                  primaryCtaLabel={section.primaryCtaLabel}
+                  primaryCtaHref={section.primaryCtaHref}
+                  secondaryCtaLabel={section.secondaryCtaLabel}
+                  secondaryCtaHref={section.secondaryCtaHref}
+                />
               </section>
             );
 
