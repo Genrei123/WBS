@@ -102,6 +102,7 @@ export const containerSectionType = defineType({
         defineArrayMember({type: 'pdfAutomation'}),
         defineArrayMember({type: 'headlessPageBuilderDemo'}),
         defineArrayMember({type: 'graphicDesign'}),
+        defineArrayMember({type: 'webDesign'}),
       ],
       description: 'Add items to be displayed inside this container',
     }),

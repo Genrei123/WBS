@@ -50,6 +50,7 @@ export const pageType = defineType({
         defineArrayMember({type: 'headlessPageBuilderDemo'}),
         defineArrayMember({type: 'graphicDesign'}),
         defineArrayMember({type: 'benefitGridSection'}),
+        defineArrayMember({type: 'webDesign'}),
       ],
       description: 'Add and reorder the sections rendered on this page.',
     }),
