@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { urlFor } from "@/sanity/lib/image";
 
 import { GalleryViewer } from "../graphic-design/default";
+import WebDesignPage from "../web-design/default";
 import PDFAutomation from "../pdf-automation/default";
 
 type PageSection = {
@@ -37,6 +38,13 @@ type PageSection = {
     description?: string;
     thumbnail?: { asset?: { _id?: string; url?: string }; alt?: string; hotspot?: unknown; crop?: unknown };
     file?: { asset?: { _id?: string; url?: string }; originalFilename?: string; mimeType?: string };
+  }>;
+  projects?: Array<{
+    _key?: string;
+    title?: string;
+    description?: string;
+    image?: { asset?: { _id?: string; url?: string }; alt?: string; hotspot?: unknown; crop?: unknown };
+    url?: string;
   }>;
   link?: {
     linkType?: "internal" | "external";
@@ -521,6 +529,13 @@ export function PageBuilder({
                     Add images or 3D models to Graphic Design in Sanity Studio.
                   </div>
                 ) : null}
+              </section>
+            );
+
+          case "webDesign":
+            return (
+              <section key={key} data-sanity={sectionAttr} className={cn(baseSectionClass, "py-20")}>
+                <WebDesignPage/>
               </section>
             );
         }

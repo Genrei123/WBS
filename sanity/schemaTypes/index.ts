@@ -17,6 +17,9 @@ import {postType} from './objects/postType'
 import {richTextSectionType} from './objects/richTextSectionType'
 import {siteSettingsType} from './objects/siteSettingsType'
 import {spacerSectionType} from './objects/spacerSectionType'
+import { graphicDesign } from './objects/graphicDesign'
+import { webDesign } from './objects/webDesign'
+
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -36,6 +39,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     navbarSettingsType,
     footerSettingsType,
     pdfAutomation,
-    graphicDesign
+    graphicDesign,
+    webDesign
   ],
 }

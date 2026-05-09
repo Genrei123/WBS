@@ -48,6 +48,7 @@ export const pageType = defineType({
         defineArrayMember({type: 'spacerSection'}),
         defineArrayMember({type: 'pdfAutomation'}),
         defineArrayMember({type: 'graphicDesign'}),
+        defineArrayMember({type: 'webDesign'}),
       ],
       description: 'Add and reorder the sections rendered on this page.',
     }),
