@@ -7,6 +7,7 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { urlFor } from "@/sanity/lib/image";
 
+import BenefitGrid from "../benefit-grid/default";
 import { GalleryViewer } from "../graphic-design/default";
 import HeadlessPageBuilderDemo from "../headless-page-builder/default";
 import PDFAutomation from "../pdf-automation/default";
@@ -31,6 +32,11 @@ type PageSection = {
     title?: string;
     description?: string;
     image?: { asset?: { _id?: string; url?: string }; alt?: string; hotspot?: unknown; crop?: unknown };
+  }>;
+  benefits?: Array<{
+    _key?: string;
+    title?: string;
+    description?: string;
   }>;
   models?: Array<{
     _key?: string;
@@ -104,7 +110,7 @@ export function PageBuilder({
   isInner,
 }: PageBuilderProps) {
   const prefix = pathPrefix || "sections";
-  const baseSectionClass = isInner ? "w-full" : "container mx-auto px-6 w-full";
+  const baseSectionClass = isInner ? "w-full" : "max-w-container mx-auto px-6 w-full";
 
   // Helper to create data attributes for sections array items
   const createSectionAttr = (key?: string) => {
@@ -242,7 +248,7 @@ export function PageBuilder({
                       isInner={true}
                     />
                   </div>
-                ) : isDraftMode ? (
+                ) : isDraftMode && !section.eyebrow && !section.title && !section.description ? (
                   <div className="border-border bg-card/30 text-muted-foreground rounded-2xl border border-dashed px-6 py-16 text-center">
                     Add items to this container in Sanity Studio.
                   </div>
@@ -545,6 +551,25 @@ export function PageBuilder({
                     Add images or 3D models to Graphic Design in Sanity Studio.
                   </div>
                 ) : null}
+              </section>
+            );
+
+          case "benefitGridSection":
+            return (
+              <section
+                key={key}
+                data-sanity={sectionAttr}
+                className={baseSectionClass}
+                style={{
+                  paddingTop: section.paddingTop ?? 96,
+                  paddingBottom: section.paddingBottom ?? 96,
+                }}
+              >
+                <BenefitGrid
+                  eyebrow={section.eyebrow}
+                  title={section.title}
+                  benefits={section.benefits}
+                />
               </section>
             );
         }

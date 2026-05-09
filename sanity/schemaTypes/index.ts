@@ -1,6 +1,7 @@
 import { type SchemaTypeDefinition } from 'sanity'
 
 import {authorType} from './objects/authorType'
+import {benefitGridSectionType} from './objects/benefitGridSectionType'
 import {blockContentType} from './objects/blockContentType'
 import {cardButtonSectionType} from './objects/cardButtonSectionType'
 import {categoryType} from './objects/categoryType'
@@ -38,6 +39,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     footerSettingsType,
     pdfAutomation,
     headlessPageBuilderDemo,
-    graphicDesign
+    graphicDesign,
+    benefitGridSectionType,
   ],
 }

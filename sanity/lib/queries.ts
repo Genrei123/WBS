@@ -129,6 +129,11 @@ export const pageBySlugQuery = groq`
       layout,
       columns,
       gap,
+      benefits[]{
+        _key,
+        title,
+        description
+      },
       items[]{
         _key,
         _type,

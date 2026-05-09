@@ -25,7 +25,7 @@ import {
   Type,
   X,
 } from "lucide-react";
-import { type ComponentType, type ReactNode, useEffect, useMemo, useState } from "react";
+import { type ComponentType, type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -43,6 +43,8 @@ type DemoBlock = {
   body?: string;
   buttonLabel?: string;
   mediaLabel?: string;
+  imageName?: string;
+  imageSrc?: string;
   align?: "left" | "center";
   height?: number;
   items?: string[];
@@ -71,6 +73,12 @@ type HeadlessPageBuilderDemoProps = {
   secondaryCtaLabel?: string;
   secondaryCtaHref?: string;
 };
+
+const BOOKING_URL = "https://cal.com/ervhyne-dalugdog-j0nivy/30min";
+
+function isBookingLabel(label?: string) {
+  return Boolean(label && label.toLowerCase().includes("book"));
+}
 
 const blockLibrary: BlockLibraryItem[] = [
   {
@@ -289,7 +297,12 @@ function TextArea({
   );
 }
 
-function renderPreviewContent(block: DemoBlock) {
+type RenderOptions = {
+  onCardClick?: (index: number) => void;
+  activeCardIndex?: number | null;
+};
+
+function renderPreviewContent(block: DemoBlock, options?: RenderOptions) {
   switch (block.kind) {
     case "richText":
       return (
@@ -312,13 +325,24 @@ function renderPreviewContent(block: DemoBlock) {
             <p className="text-muted-foreground mt-2 text-sm leading-relaxed">{block.body}</p>
           </div>
           <div
-            className="border-border/70 from-sky-500/20 via-background to-brand/20 flex items-center justify-center rounded-lg border bg-linear-to-br"
-            style={{ minHeight: block.height || 220 }}
+            className="border-border/70 from-sky-500/20 via-background to-brand/20 relative flex items-center justify-center overflow-hidden rounded-lg border bg-linear-to-br bg-cover bg-center"
+            style={{
+              minHeight: block.height || 220,
+              backgroundImage: block.imageSrc
+                ? `linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.18)), url("${block.imageSrc}")`
+                : undefined,
+            }}
           >
-            <div className="text-muted-foreground flex flex-col items-center gap-3 text-sm">
-              <ImageIcon className="size-8" />
-              <span>{block.mediaLabel || "CMS media asset"}</span>
-            </div>
+            {block.imageSrc ? (
+              <div className="absolute right-3 bottom-3 rounded-md border border-white/20 bg-black/60 px-3 py-1 text-xs text-white backdrop-blur">
+                {block.imageName || block.mediaLabel || "Temporary image"}
+              </div>
+            ) : (
+              <div className="text-muted-foreground flex flex-col items-center gap-3 text-sm">
+                <ImageIcon className="size-8" />
+                <span>{block.mediaLabel || "CMS media asset"}</span>
+              </div>
+            )}
           </div>
         </div>
       );
@@ -331,9 +355,21 @@ function renderPreviewContent(block: DemoBlock) {
           <h3 className="mx-auto mt-2 max-w-2xl text-2xl font-semibold tracking-tight">{block.title}</h3>
           <p className="text-muted-foreground mx-auto mt-3 max-w-xl text-sm leading-relaxed">{block.body}</p>
           {block.buttonLabel ? (
-            <span className="bg-primary text-primary-foreground mt-5 inline-flex h-10 items-center justify-center rounded-md px-5 text-sm font-medium">
-              {block.buttonLabel}
-            </span>
+            isBookingLabel(block.buttonLabel) ? (
+              <a
+                href={BOOKING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(event) => event.stopPropagation()}
+                className="bg-primary text-primary-foreground hover:bg-primary/90 mt-5 inline-flex h-10 items-center justify-center rounded-md px-5 text-sm font-medium transition-colors"
+              >
+                {block.buttonLabel}
+              </a>
+            ) : (
+              <span className="bg-primary text-primary-foreground mt-5 inline-flex h-10 items-center justify-center rounded-md px-5 text-sm font-medium">
+                {block.buttonLabel}
+              </span>
+            )
           ) : null}
         </div>
       );
@@ -348,14 +384,42 @@ function renderPreviewContent(block: DemoBlock) {
             <p className="text-muted-foreground mt-2 max-w-2xl text-sm leading-relaxed">{block.body}</p>
           </div>
           <div className="grid gap-3 md:grid-cols-3">
-            {(block.items || []).map((item, index) => (
-              <div key={`${item}-${index}`} className="border-border/70 bg-background/60 rounded-lg border p-4">
-                <div className="bg-brand/20 text-brand mb-4 flex size-9 items-center justify-center rounded-md">
-                  <Blocks className="size-4" />
+            {(block.items || []).map((item, index) => {
+              const isActive = options?.activeCardIndex === index;
+              return (
+                <div
+                  key={`${item}-${index}`}
+                  role="button"
+                  tabIndex={0}
+                  onClick={(event) => {
+                    if (!options?.onCardClick) return;
+                    event.stopPropagation();
+                    options.onCardClick(index);
+                  }}
+                  onKeyDown={(event) => {
+                    if (!options?.onCardClick) return;
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      options.onCardClick(index);
+                    }
+                  }}
+                  className={cn(
+                    "rounded-lg border p-4 outline-none transition-colors",
+                    options?.onCardClick && "cursor-pointer",
+                    isActive
+                      ? "border-brand bg-brand/10 shadow-[0_0_0_2px_rgba(224,201,166,0.18)]"
+                      : "border-border/70 bg-background/60",
+                    options?.onCardClick && !isActive && "hover:border-brand/40 hover:bg-brand/5"
+                  )}
+                >
+                  <div className="bg-brand/20 text-brand mb-4 flex size-9 items-center justify-center rounded-md">
+                    <Blocks className="size-4" />
+                  </div>
+                  <p className="text-sm font-medium">{item}</p>
                 </div>
-                <p className="text-sm font-medium">{item}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       );
@@ -378,9 +442,21 @@ function renderPreviewContent(block: DemoBlock) {
           <h2 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">{block.title}</h2>
           <p className="text-muted-foreground mx-auto mt-4 max-w-2xl text-base leading-relaxed">{block.body}</p>
           {block.buttonLabel ? (
-            <span className="bg-primary text-primary-foreground mt-6 inline-flex h-10 items-center justify-center rounded-md px-5 text-sm font-medium">
-              {block.buttonLabel}
-            </span>
+            isBookingLabel(block.buttonLabel) ? (
+              <a
+                href={BOOKING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(event) => event.stopPropagation()}
+                className="bg-primary text-primary-foreground hover:bg-primary/90 mt-6 inline-flex h-10 items-center justify-center rounded-md px-5 text-sm font-medium transition-colors"
+              >
+                {block.buttonLabel}
+              </a>
+            ) : (
+              <span className="bg-primary text-primary-foreground mt-6 inline-flex h-10 items-center justify-center rounded-md px-5 text-sm font-medium">
+                {block.buttonLabel}
+              </span>
+            )
           ) : null}
         </div>
       );
@@ -403,12 +479,15 @@ export default function HeadlessPageBuilderDemo({
   const [blockCounter, setBlockCounter] = useState(initialBlocks.length + 1);
   const [status, setStatus] = useState<DemoStatus>("Draft");
   const [previewSize, setPreviewSize] = useState<PreviewSize>("desktop");
+  const [focusedCardIndex, setFocusedCardIndex] = useState<number | null>(null);
+  const objectUrlsRef = useRef<string[]>([]);
+  const cardInputRefs = useRef<Array<HTMLInputElement | null>>([]);
 
   const editingBlock = blocks.find((block) => block.id === editingId) || null;
   const contextBlock = blocks.find((block) => block.id === contextMenu?.blockId) || null;
 
   const canvasInstructions = useMemo(
-    () => (blocks.length > 0 ? "Right-click any section to add, edit, duplicate, reorder, or remove modules." : "Right-click the canvas to add your first module."),
+    () => (blocks.length > 0 ? "Click a section to edit. Right-click for layout actions." : "Right-click the canvas to add your first module."),
     [blocks.length]
   );
 
@@ -429,6 +508,27 @@ export default function HeadlessPageBuilderDemo({
       window.removeEventListener("keydown", closeOnEscape);
     };
   }, []);
+
+  useEffect(() => {
+    return () => {
+      objectUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, []);
+
+  useEffect(() => {
+    if (editingBlock?.kind !== "cards") {
+      setFocusedCardIndex(null);
+    }
+  }, [editingBlock]);
+
+  useEffect(() => {
+    if (focusedCardIndex === null) return;
+    const input = cardInputRefs.current[focusedCardIndex];
+    if (input) {
+      input.focus();
+      input.select();
+    }
+  }, [focusedCardIndex, editingId]);
 
   const insertBlock = (kind: DemoBlockKind, placement: "end" | "before" | "after", targetId?: string) => {
     const block = createBlock(kind, blockCounter);
@@ -474,7 +574,13 @@ export default function HeadlessPageBuilderDemo({
 
   const deleteBlock = (id: string) => {
     const index = blocks.findIndex((block) => block.id === id);
+    const deletedBlock = blocks[index];
     const nextBlocks = blocks.filter((block) => block.id !== id);
+
+    if (deletedBlock?.imageSrc?.startsWith("blob:")) {
+      URL.revokeObjectURL(deletedBlock.imageSrc);
+      objectUrlsRef.current = objectUrlsRef.current.filter((url) => url !== deletedBlock.imageSrc);
+    }
 
     setBlocks(nextBlocks);
     setContextMenu(null);
@@ -496,6 +602,9 @@ export default function HeadlessPageBuilderDemo({
       ...target,
       id: `block-${target.kind}-${blockCounter}`,
       title: `${target.title} copy`,
+      imageName: target.imageSrc?.startsWith("blob:") ? undefined : target.imageName,
+      imageSrc: target.imageSrc?.startsWith("blob:") ? undefined : target.imageSrc,
+      mediaLabel: target.imageSrc?.startsWith("blob:") ? "Sanity image asset" : target.mediaLabel,
     };
     const index = blocks.findIndex((block) => block.id === id);
     const nextBlocks = [...blocks];
@@ -522,6 +631,53 @@ export default function HeadlessPageBuilderDemo({
     updateEditingBlock({ items: nextItems });
   };
 
+  const updateMediaImage = (file?: File) => {
+    if (!editingId || !file) return;
+
+    const imageSrc = URL.createObjectURL(file);
+    objectUrlsRef.current.push(imageSrc);
+
+    setBlocks((current) =>
+      current.map((block) => {
+        if (block.id !== editingId) return block;
+
+        if (block.imageSrc?.startsWith("blob:")) {
+          URL.revokeObjectURL(block.imageSrc);
+          objectUrlsRef.current = objectUrlsRef.current.filter((url) => url !== block.imageSrc);
+        }
+
+        return {
+          ...block,
+          imageSrc,
+          imageName: file.name,
+          mediaLabel: file.name,
+        };
+      })
+    );
+  };
+
+  const removeMediaImage = () => {
+    if (!editingId) return;
+
+    setBlocks((current) =>
+      current.map((block) => {
+        if (block.id !== editingId) return block;
+
+        if (block.imageSrc?.startsWith("blob:")) {
+          URL.revokeObjectURL(block.imageSrc);
+          objectUrlsRef.current = objectUrlsRef.current.filter((url) => url !== block.imageSrc);
+        }
+
+        return {
+          ...block,
+          imageSrc: undefined,
+          imageName: undefined,
+          mediaLabel: "Sanity image asset",
+        };
+      })
+    );
+  };
+
   const openContextMenu = (event: React.MouseEvent, blockId?: string) => {
     event.preventDefault();
     event.stopPropagation();
@@ -546,57 +702,61 @@ export default function HeadlessPageBuilderDemo({
     setBlockCounter(initialBlocks.length + 1);
     setStatus("Draft");
     setPreviewSize("desktop");
+    setFocusedCardIndex(null);
+    objectUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+    objectUrlsRef.current = [];
   };
 
   return (
     <div className="mx-auto w-full max-w-7xl space-y-12">
-      <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
-        <div className="space-y-6">
-          {eyebrow ? (
-            <Badge variant="outline" className="border-brand/30 text-brand bg-brand/10">
-              <Sparkles className="size-3.5" />
-              {eyebrow}
-            </Badge>
-          ) : null}
-          <div className="space-y-5">
-            <h2 className="max-w-4xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
+      <div className="space-y-10">
+        <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
+          <div className="space-y-6">
+            {eyebrow ? (
+              <Badge variant="outline" className="border-brand/30 text-brand bg-brand/10">
+                <Sparkles className="size-3.5" />
+                {eyebrow}
+              </Badge>
+            ) : null}
+            <h2 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
               {title}
             </h2>
-            {description ? (
-              <p className="text-muted-foreground max-w-2xl text-base leading-relaxed sm:text-lg">{description}</p>
-            ) : null}
+            <div className="flex flex-wrap gap-3">
+              {primaryCtaLabel && primaryCtaHref ? (
+                <Button asChild size="lg">
+                  <a href={primaryCtaHref}>{primaryCtaLabel}</a>
+                </Button>
+              ) : null}
+              {secondaryCtaLabel && secondaryCtaHref ? (
+                <Button asChild size="lg" variant="outline">
+                  <a href={secondaryCtaHref}>{secondaryCtaLabel}</a>
+                </Button>
+              ) : null}
+            </div>
           </div>
-          <div className="flex flex-wrap gap-3">
-            {primaryCtaLabel && primaryCtaHref ? (
-              <Button asChild size="lg">
-                <a href={primaryCtaHref}>{primaryCtaLabel}</a>
-              </Button>
-            ) : null}
-            {secondaryCtaLabel && secondaryCtaHref ? (
-              <Button asChild size="lg" variant="outline">
-                <a href={secondaryCtaHref}>{secondaryCtaLabel}</a>
-              </Button>
-            ) : null}
-          </div>
+
+          {description ? (
+            <p className="text-muted-foreground text-base leading-relaxed sm:text-lg">{description}</p>
+          ) : null}
         </div>
 
-        <div
-          id="builder-workflow"
-          className="border-border/70 bg-card/50 grid gap-3 rounded-xl border p-4 shadow-2xl shadow-black/10 sm:grid-cols-3"
-        >
-          {[
-            ["1", "Add blocks", "Right-click the canvas"],
-            ["2", "Edit content", "Open edit mode per section"],
-            ["3", "Preview page", "Resize and publish"],
-          ].map(([step, heading, copy]) => (
-            <div key={step} className="bg-background/70 rounded-lg border border-white/10 p-4">
-              <span className="bg-brand/20 text-brand inline-flex size-8 items-center justify-center rounded-md text-sm font-semibold">
-                {step}
-              </span>
-              <p className="mt-4 text-sm font-semibold">{heading}</p>
-              <p className="text-muted-foreground mt-1 text-xs leading-relaxed">{copy}</p>
-            </div>
-          ))}
+        <div id="builder-workflow" className="border-border/60 border-t pt-8">
+          <p className="text-brand text-xs font-semibold tracking-[0.24em] uppercase">How the builder feels</p>
+          <div className="mt-6 grid gap-8 sm:grid-cols-3 sm:gap-10">
+            {[
+              ["Compose visually", "Add reusable page sections without touching code."],
+              ["Edit in context", "Click any section and update its content instantly."],
+              ["Publish with confidence", "Preview responsive layouts before content goes live."],
+            ].map(([heading, copy], index) => (
+              <div key={heading} className="space-y-2">
+                <p className="text-brand/60 text-xs font-medium tracking-widest">
+                  {String(index + 1).padStart(2, "0")}
+                </p>
+                <p className="text-base font-semibold">{heading}</p>
+                <p className="text-muted-foreground text-sm leading-relaxed">{copy}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -665,7 +825,7 @@ export default function HeadlessPageBuilderDemo({
                 Live Page Canvas
               </p>
               <p className="text-xs text-white/45">
-                Right-click modules or empty space for builder actions. The canvas scrolls independently.
+                Click a section to edit its content. Right-click for add, reorder, duplicate, and remove actions.
               </p>
             </div>
             <div className={cn("inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-xs", statusStyles[status])}>
@@ -696,12 +856,16 @@ export default function HeadlessPageBuilderDemo({
                         onClick={(event) => {
                           event.stopPropagation();
                           setSelectedId(block.id);
+                          setEditingId(block.id);
+                          setContextMenu(null);
                         }}
                         onContextMenu={(event) => openContextMenu(event, block.id)}
                         onKeyDown={(event) => {
                           if (event.key === "Enter" || event.key === " ") {
                             event.preventDefault();
                             setSelectedId(block.id);
+                            setEditingId(block.id);
+                            setContextMenu(null);
                           }
                         }}
                         className={cn(
@@ -720,7 +884,19 @@ export default function HeadlessPageBuilderDemo({
                           <span>{getBlockLabel(block.kind)}</span>
                         </div>
 
-                        {renderPreviewContent(block)}
+                        {renderPreviewContent(block, {
+                          onCardClick:
+                            block.kind === "cards"
+                              ? (index) => {
+                                  setSelectedId(block.id);
+                                  setEditingId(block.id);
+                                  setContextMenu(null);
+                                  setFocusedCardIndex(index);
+                                }
+                              : undefined,
+                          activeCardIndex:
+                            editingId === block.id ? focusedCardIndex : null,
+                        })}
                       </section>
                     );
                   })}
@@ -748,22 +924,6 @@ export default function HeadlessPageBuilderDemo({
                   <span>{contextBlock ? getBlockLabel(contextBlock.kind) : "Canvas"}</span>
                   <MoreHorizontal className="size-3.5" />
                 </div>
-
-                {contextBlock ? (
-                  <button
-                    type="button"
-                    onMouseEnter={() => showAddFlyout(undefined)}
-                    onClick={() => {
-                      setEditingId(contextBlock.id);
-                      setSelectedId(contextBlock.id);
-                      setContextMenu(null);
-                    }}
-                    className="hover:bg-brand/10 hover:text-brand flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left transition-colors"
-                  >
-                    <Settings2 className="size-4" />
-                    Edit
-                  </button>
-                ) : null}
 
                 <button
                   type="button"
@@ -937,6 +1097,31 @@ export default function HeadlessPageBuilderDemo({
 
                 {editingBlock.kind === "media" ? (
                   <>
+                    <Field label="Temporary Image">
+                      <div className="space-y-3">
+                        <label className="hover:border-brand/60 hover:bg-brand/10 flex cursor-pointer items-center gap-3 rounded-md border border-dashed border-white/15 bg-[#0d0f16] px-3 py-3 text-sm text-white/70 transition-colors">
+                          <ImageIcon className="text-brand size-4" />
+                          <span>{editingBlock.imageName || "Choose an image for this preview"}</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="sr-only"
+                            onChange={(event) => updateMediaImage(event.target.files?.[0])}
+                          />
+                        </label>
+                        {editingBlock.imageSrc ? (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={removeMediaImage}
+                            className="border-white/15 bg-white/5 text-white hover:bg-white/10"
+                          >
+                            Remove image
+                          </Button>
+                        ) : null}
+                      </div>
+                    </Field>
                     <Field label="Media Label">
                       <TextInput
                         value={editingBlock.mediaLabel}
@@ -975,15 +1160,31 @@ export default function HeadlessPageBuilderDemo({
                 {editingBlock.kind === "cards" ? (
                   <div className="space-y-3">
                     <p className="text-sm font-medium text-white/65">Card Items</p>
+                    <p className="text-xs text-white/40">
+                      Tip: click a card on the canvas to jump to its field here.
+                    </p>
                     <div className="grid gap-3">
-                      {(editingBlock.items || []).map((item, index) => (
-                        <TextInput
-                          key={index}
-                          value={item}
-                          onChange={(value) => updateCardItem(index, value)}
-                          placeholder={`Card ${index + 1}`}
-                        />
-                      ))}
+                      {(editingBlock.items || []).map((item, index) => {
+                        const isActive = focusedCardIndex === index;
+                        return (
+                          <input
+                            key={index}
+                            ref={(el) => {
+                              cardInputRefs.current[index] = el;
+                            }}
+                            value={item}
+                            onChange={(event) => updateCardItem(index, event.target.value)}
+                            onFocus={() => setFocusedCardIndex(index)}
+                            placeholder={`Card ${index + 1}`}
+                            className={cn(
+                              "h-10 rounded-md border bg-[#0d0f16] px-3 text-sm text-white outline-none transition-colors placeholder:text-white/30",
+                              isActive
+                                ? "border-brand ring-brand/30 ring-2"
+                                : "focus:border-brand border-white/10"
+                            )}
+                          />
+                        );
+                      })}
                     </div>
                   </div>
                 ) : null}

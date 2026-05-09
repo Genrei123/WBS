@@ -49,6 +49,7 @@ export const pageType = defineType({
         defineArrayMember({type: 'pdfAutomation'}),
         defineArrayMember({type: 'headlessPageBuilderDemo'}),
         defineArrayMember({type: 'graphicDesign'}),
+        defineArrayMember({type: 'benefitGridSection'}),
       ],
       description: 'Add and reorder the sections rendered on this page.',
     }),
