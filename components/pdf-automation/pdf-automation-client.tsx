@@ -18,8 +18,8 @@ interface Annotation {
   dataUrl?: string;
 }
 
-// ── Consistent PDF render width ───────────────────────────────────────────────
-const PDF_WIDTH = 550;
+// ── Consistent PDF render width (max) ────────────────────────────────────────
+const PDF_MAX_WIDTH = 550;
 
 // ── Signature Modal ────────────────────────────────────────────────────────────
 
@@ -36,20 +36,42 @@ function SignatureModal({
   const [typedSig, setTypedSig] = useState("");
   const drawCanvasRef = useRef<HTMLCanvasElement>(null);
   const typeCanvasRef = useRef<HTMLCanvasElement>(null);
+  const [canvasW, setCanvasW] = useState(380);
+  const [canvasH, setCanvasH] = useState(140);
   const isDrawing = useRef(false);
+
+  useEffect(() => {
+    function updateSize() {
+      const w = Math.min(380, Math.round(window.innerWidth * 0.9));
+      const h = Math.max(80, Math.round(w * 0.36));
+      setCanvasW(w);
+      setCanvasH(h);
+    }
+
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
 
   useEffect(() => {
     if (!open || tab !== "draw") return;
     const canvas = drawCanvasRef.current;
     if (!canvas) return;
+    // Set internal pixel buffer size for crisp lines on HiDPI devices
+    const ratio = window.devicePixelRatio || 1;
+    canvas.width = canvasW * ratio;
+    canvas.height = canvasH * ratio;
+    canvas.style.width = `${canvasW}px`;
+    canvas.style.height = `${canvasH}px`;
     const ctx = canvas.getContext("2d")!;
+    ctx.scale(ratio, ratio);
     ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, canvasW, canvasH);
     ctx.strokeStyle = "#1a1a1a";
     ctx.lineWidth = 2.5;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-  }, [open, tab]);
+  }, [open, tab, canvasW, canvasH]);
 
   function getPos(canvas: HTMLCanvasElement, e: React.PointerEvent) {
     const rect = canvas.getBoundingClientRect();
@@ -87,12 +109,19 @@ function SignatureModal({
   function renderTyped(val: string) {
     const canvas = typeCanvasRef.current;
     if (!canvas) return;
+    const ratio = window.devicePixelRatio || 1;
+    canvas.width = canvasW * ratio;
+    canvas.height = canvasH * ratio;
+    canvas.style.width = `${canvasW}px`;
+    canvas.style.height = `${canvasH}px`;
     const ctx = canvas.getContext("2d")!;
+    ctx.scale(ratio, ratio);
     ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, canvasW, canvasH);
     ctx.fillStyle = "#000";
-    ctx.font = "italic 38px Georgia, serif";
-    ctx.fillText(val, 12, 60);
+    const fontSize = Math.max(18, Math.round(canvasW / 10));
+    ctx.font = `italic ${fontSize}px Georgia, serif`;
+    ctx.fillText(val, 12, Math.round(canvasH / 2));
   }
 
   function handleApply() {
@@ -137,8 +166,7 @@ function SignatureModal({
           <div>
             <canvas
               ref={drawCanvasRef}
-              width={380}
-              height={140}
+              // width/height set in effect for crispness
               className="w-full cursor-crosshair touch-none rounded border bg-white"
               onPointerDown={onPointerDown}
               onPointerMove={onPointerMove}
@@ -491,6 +519,8 @@ export default function PDFAutomationClient() {
   const [working, setWorking] = useState(false);
   const [capturedDimensions, setCapturedDimensions] = useState<{ width: number; height: number } | null>(null);
 
+  const [renderWidth, setRenderWidth] = useState<number>(PDF_MAX_WIDTH);
+
   // We capture the actual rendered PDF dimensions here for accurate scale
   const pdfWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -499,6 +529,32 @@ export default function PDFAutomationClient() {
     pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
     isWorkerInitialized.current = true;
   }, []);
+
+  // Keep a responsive render width based on the PDF wrapper container
+  useEffect(() => {
+    const el = pdfWrapperRef.current;
+    if (!el) return;
+
+    const update = () => {
+      const w = Math.max(200, Math.min(PDF_MAX_WIDTH, el.clientWidth || window.innerWidth));
+      setRenderWidth(w);
+    };
+
+    update();
+
+    let ro: ResizeObserver | null = null;
+    if ((window as any).ResizeObserver) {
+      ro = new ResizeObserver(update);
+      ro.observe(el);
+    } else {
+      window.addEventListener("resize", update);
+    }
+
+    return () => {
+      if (ro) ro.disconnect();
+      else window.removeEventListener("resize", update);
+    };
+  }, [pdfWrapperRef.current]);
 
   // ── Build PDF ──────────────────────────────────────────────────────────────
   async function buildPdf(src: string, dimensions?: { width: number; height: number } | null) {
@@ -511,7 +567,7 @@ export default function PDFAutomationClient() {
 
     // Use provided dimensions or fallback to captured/current dimensions
     const dims = dimensions || capturedDimensions;
-    const renderW = dims?.width || pdfWrapperRef.current?.clientWidth || PDF_WIDTH;
+    const renderW = dims?.width || pdfWrapperRef.current?.clientWidth || renderWidth;
     const renderH = dims?.height || pdfWrapperRef.current?.clientHeight || 800;
     const scaleX = pdfW / renderW;
     const scaleY = pdfH / renderH;
@@ -701,7 +757,7 @@ export default function PDFAutomationClient() {
                   file="/pdf-automation/Letter_1.pdf"
                   error={<div className="p-4 text-red-500">Failed to load PDF.</div>}
                 >
-                  <Page pageNumber={1} renderTextLayer={false} renderAnnotationLayer={false} width={PDF_WIDTH} />
+                    <Page pageNumber={1} renderTextLayer={false} renderAnnotationLayer={false} width={renderWidth} />
                 </Document>
                 <AnnotationOverlay
                   tool={tool}
@@ -717,11 +773,11 @@ export default function PDFAutomationClient() {
                 />
               </div>
 
-              <button
+                <button
                 onClick={handleGenerateLetter1}
                 disabled={!hasAnnotations || working}
                 className="w-full rounded bg-gray-900 py-3 text-sm font-semibold text-white transition-opacity hover:bg-gray-700 disabled:opacity-40"
-                style={{ maxWidth: PDF_WIDTH }}
+                style={{ maxWidth: renderWidth }}
               >
                 {working ? "Generating…" : "Generate Letter 1 Preview →"}
               </button>
@@ -747,7 +803,7 @@ export default function PDFAutomationClient() {
             <div className={`flex flex-wrap justify-center gap-8`}>
               {/* Letter 1 */}
               <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-between" style={{ width: PDF_WIDTH }}>
+                <div className="flex items-center justify-between" style={{ width: renderWidth }}>
                   <h2 className="text-2xl font-bold">Letter 1</h2>
                   <a href={letter1Url!} download="Letter_1_signed.pdf" className="text-sm text-blue-500 underline">
                     Download
@@ -755,7 +811,7 @@ export default function PDFAutomationClient() {
                 </div>
                 <div className="overflow-hidden rounded border bg-white shadow-md" style={{ display: "inline-block" }}>
                   <Document file={letter1Url!} error={<div className="p-4 text-red-500">Failed to load PDF.</div>}>
-                    <Page pageNumber={1} renderTextLayer={false} renderAnnotationLayer={false} width={PDF_WIDTH} />
+                    <Page pageNumber={1} renderTextLayer={false} renderAnnotationLayer={false} width={renderWidth} />
                   </Document>
                 </div>
               </div>
@@ -763,7 +819,7 @@ export default function PDFAutomationClient() {
               {/* Letter 2 — only show if synced */}
               {letter2Url && (
                 <div className="flex flex-col gap-2">
-                  <div className="flex items-center justify-between" style={{ width: PDF_WIDTH }}>
+                  <div className="flex items-center justify-between" style={{ width: renderWidth }}>
                     <h2 className="text-2xl font-bold">Letter 2</h2>
                     <a href={letter2Url} download="Letter_2_signed.pdf" className="text-sm text-blue-500 underline">
                       Download
@@ -774,7 +830,7 @@ export default function PDFAutomationClient() {
                     style={{ display: "inline-block" }}
                   >
                     <Document file={letter2Url} error={<div className="p-4 text-red-500">Failed to load PDF.</div>}>
-                      <Page pageNumber={1} renderTextLayer={false} renderAnnotationLayer={false} width={PDF_WIDTH} />
+                      <Page pageNumber={1} renderTextLayer={false} renderAnnotationLayer={false} width={renderWidth} />
                     </Document>
                   </div>
                 </div>
@@ -783,11 +839,11 @@ export default function PDFAutomationClient() {
 
             {stage === "preview" && (
               <div className="mt-6 flex w-full justify-center">
-                <button
+                  <button
                   onClick={handleSync}
                   disabled={working}
                   className="rounded bg-gray-900 py-3 text-sm font-semibold text-white transition-opacity hover:bg-gray-700 disabled:opacity-40"
-                  style={{ width: PDF_WIDTH }} // single column width
+                  style={{ width: renderWidth }} // single column width
                 >
                   {working ? "Syncing…" : "Sync Annotations to Letter 2 →"}
                 </button>

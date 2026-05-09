@@ -1,6 +1,7 @@
 import {draftMode} from "next/headers";
 
 import {PageBuilder} from "@/components/page-builder/page-builder";
+import Reveal from "@/components/ui/reveal";
 import {sanityFetch} from "@/sanity/lib/live";
 import {pageBySlugQuery} from "@/sanity/lib/queries";
 
@@ -15,12 +16,14 @@ export default async function Home() {
 
   return (
     <main className="bg-background text-foreground min-h-screen w-full">
-      <PageBuilder
-        sections={homePage?.sections}
-        documentId={homePage?._id}
-        documentType={homePage?._type}
-        isDraftMode={isEnabled}
-      />
+      <Reveal>
+        <PageBuilder
+          sections={homePage?.sections}
+          documentId={homePage?._id}
+          documentType={homePage?._type}
+          isDraftMode={isEnabled}
+        />
+      </Reveal>
     </main>
   );
 }

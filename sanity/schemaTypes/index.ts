@@ -19,8 +19,8 @@ import {postType} from './objects/postType'
 import {richTextSectionType} from './objects/richTextSectionType'
 import {siteSettingsType} from './objects/siteSettingsType'
 import {spacerSectionType} from './objects/spacerSectionType'
-import { graphicDesign } from './objects/graphicDesign'
 import { webDesign } from './objects/webDesign'
+import {bentoBoxSectionType} from './objects/bentoBoxSectionType'
 
 
 export const schema: { types: SchemaTypeDefinition[] } = {
@@ -44,7 +44,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     headlessPageBuilderDemo,
     graphicDesign,
     benefitGridSectionType,
-    graphicDesign,
-    webDesign
+    webDesign,
+    bentoBoxSectionType
   ],
 }

@@ -15,6 +15,7 @@ import {
   Monitor,
   MoreHorizontal,
   MousePointer2,
+  Minimize2,
   Plus,
   Rows3,
   Settings2,
@@ -480,8 +481,10 @@ export default function HeadlessPageBuilderDemo({
   const [status, setStatus] = useState<DemoStatus>("Draft");
   const [previewSize, setPreviewSize] = useState<PreviewSize>("desktop");
   const [focusedCardIndex, setFocusedCardIndex] = useState<number | null>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const objectUrlsRef = useRef<string[]>([]);
   const cardInputRefs = useRef<Array<HTMLInputElement | null>>([]);
+  const demoShellRef = useRef<HTMLDivElement | null>(null);
 
   const editingBlock = blocks.find((block) => block.id === editingId) || null;
   const contextBlock = blocks.find((block) => block.id === contextMenu?.blockId) || null;
@@ -529,6 +532,19 @@ export default function HeadlessPageBuilderDemo({
       input.select();
     }
   }, [focusedCardIndex, editingId]);
+
+  useEffect(() => {
+    const syncFullscreenState = () => {
+      setIsFullscreen(Boolean(document.fullscreenElement && document.fullscreenElement === demoShellRef.current));
+    };
+
+    document.addEventListener("fullscreenchange", syncFullscreenState);
+    syncFullscreenState();
+
+    return () => {
+      document.removeEventListener("fullscreenchange", syncFullscreenState);
+    };
+  }, []);
 
   const insertBlock = (kind: DemoBlockKind, placement: "end" | "before" | "after", targetId?: string) => {
     const block = createBlock(kind, blockCounter);
@@ -694,6 +710,23 @@ export default function HeadlessPageBuilderDemo({
     setContextMenu((current) => (current ? { ...current, addPlacement: placement } : current));
   };
 
+  const toggleFullscreen = async () => {
+    if (!demoShellRef.current) return;
+
+    if (!document.fullscreenEnabled) return;
+
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+        return;
+      }
+
+      await demoShellRef.current.requestFullscreen();
+    } catch {
+      // Ignore fullscreen errors so the editor remains usable.
+    }
+  };
+
   const resetDemo = () => {
     setBlocks(initialBlocks);
     setSelectedId(initialBlocks[0]?.id || null);
@@ -708,7 +741,7 @@ export default function HeadlessPageBuilderDemo({
   };
 
   return (
-    <div className="mx-auto w-full max-w-7xl space-y-12">
+    <div ref={demoShellRef} className={cn("mx-auto w-full max-w-7xl space-y-12", isFullscreen && "max-w-none space-y-0") }>
       <div className="space-y-10">
         <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
           <div className="space-y-6">
@@ -760,7 +793,13 @@ export default function HeadlessPageBuilderDemo({
         </div>
       </div>
 
-      <div id="builder-demo" className="border-border/70 bg-[#0d0f16] text-white overflow-hidden rounded-2xl border shadow-2xl">
+      <div
+        id="builder-demo"
+        className={cn(
+          "border-border/70 bg-[#0d0f16] text-white overflow-hidden rounded-2xl border shadow-2xl",
+          isFullscreen && "fixed inset-0 z-50 rounded-none border-0 shadow-none"
+        )}
+      >
         <div className="border-white/10 bg-[#11131d] flex flex-col gap-4 border-b p-4 xl:flex-row xl:items-center xl:justify-between">
           <div className="flex items-center gap-3">
             <div className="bg-brand/20 text-brand flex size-10 items-center justify-center rounded-lg">
@@ -806,13 +845,28 @@ export default function HeadlessPageBuilderDemo({
                 {item}
               </button>
             ))}
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={toggleFullscreen}
+              className="border-white/15 bg-white/5 text-white hover:bg-white/10"
+            >
+              {isFullscreen ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
+              {isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+            </Button>
             <Button type="button" size="sm" variant="outline" onClick={resetDemo} className="border-white/15 bg-white/5 text-white hover:bg-white/10">
               Reset
             </Button>
           </div>
         </div>
 
-        <main className="relative flex h-[min(820px,calc(100vh-7rem))] min-h-[620px] flex-col overflow-hidden bg-[#090a0f] p-4 sm:p-6">
+        <main
+          className={cn(
+            "relative flex h-[min(820px,calc(100vh-7rem))] min-h-[620px] flex-col overflow-hidden bg-[#090a0f] p-4 sm:p-6",
+            isFullscreen && "h-[calc(100vh-65px)] min-h-0"
+          )}
+        >
           <div
             className={cn(
               "mb-4 flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between",

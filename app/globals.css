@@ -323,3 +323,9 @@
     font-family: var(--font-sans);
   }
 }
+
+/* Smooth scrolling for anchor navigation */
+html {
+  scroll-behavior: smooth;
+}
+/* Reveal animations are provided by Framer Motion (components/ui/reveal.tsx) */

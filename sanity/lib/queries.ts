@@ -33,16 +33,22 @@ export const navbarQuery = groq`
         internalPage->{slug},
         externalUrl
       },
+      icon,
+      iconUrl,
       dropdownVariant,
       dropdownItems[]{
         _key,
         label,
+        icon,
+        iconUrl,
         linkType,
         internalPage->{slug},
         externalUrl
       },
       featuredItem{
         label,
+        icon,
+        iconUrl,
         linkType,
         internalPage->{slug},
         externalUrl
@@ -51,17 +57,12 @@ export const navbarQuery = groq`
     actions[]{
       _key,
       label,
+      icon,
+      iconUrl,
       linkType,
       internalPage->{slug},
       externalUrl,
       variant
-    },
-    mobileLinks[]{
-      _key,
-      label,
-      linkType,
-      internalPage->{slug},
-      externalUrl
     }
   }
 `
@@ -134,6 +135,27 @@ export const pageBySlugQuery = groq`
         title,
         description
       },
+      bentoBoxes[]{
+        _key,
+        title,
+        subtitle,
+        url,
+        image{
+          asset->{_id, url},
+          alt,
+          hotspot,
+          crop
+        },
+        hoverAction,
+        morphImage{
+          asset->{_id, url},
+          alt,
+          hotspot,
+          crop
+        },
+        hasGlow,
+        glowColor
+      },
       items[]{
         _key,
         _type,
@@ -189,7 +211,28 @@ export const pageBySlugQuery = groq`
         },
         headerLayout,
         textAlign,
-        layout
+        layout,
+        bentoBoxes[]{
+          _key,
+          title,
+          subtitle,
+          url,
+          image{
+            asset->{_id, url},
+            alt,
+            hotspot,
+            crop
+          },
+          hoverAction,
+          morphImage{
+            asset->{_id, url},
+            alt,
+            hotspot,
+            crop
+          },
+          hasGlow,
+          glowColor
+        }
       }
     }
   }

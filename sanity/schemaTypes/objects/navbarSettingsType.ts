@@ -68,6 +68,30 @@ export const navbarSettingsType = defineType({
               type: "string",
               validation: (Rule) => Rule.required(),
             }),
+            defineField({
+              name: "icon",
+              title: "Icon (preset)",
+              type: "string",
+              options: {
+                list: [
+                  { title: "None", value: "none" },
+                  { title: "Facebook", value: "facebook" },
+                  { title: "YouTube", value: "youtube" },
+                  { title: "Twitter", value: "twitter" },
+                  { title: "Instagram", value: "instagram" },
+                  { title: "LinkedIn", value: "linkedin" },
+                  { title: "Custom URL", value: "custom" },
+                ],
+              },
+              initialValue: "none",
+            }),
+            defineField({
+              name: "iconUrl",
+              title: "Custom Icon URL",
+              type: "url",
+              hidden: ({ parent }) => parent?.icon !== "custom",
+              description: "Optional: URL to an SVG or PNG to use as the icon when 'Custom URL' is selected",
+            }),
             {
               name: "mainLink",
               title: "Main Link",
@@ -217,6 +241,31 @@ export const navbarSettingsType = defineType({
               },
               initialValue: "internal",
             },
+            // Icon support for action buttons
+            defineField({
+              name: "icon",
+              title: "Icon (preset)",
+              type: "string",
+              options: {
+                list: [
+                  { title: "None", value: "none" },
+                  { title: "Facebook", value: "facebook" },
+                  { title: "YouTube", value: "youtube" },
+                  { title: "Twitter", value: "twitter" },
+                  { title: "Instagram", value: "instagram" },
+                  { title: "LinkedIn", value: "linkedin" },
+                  { title: "Custom URL", value: "custom" },
+                ],
+              },
+              initialValue: "none",
+            }),
+            defineField({
+              name: "iconUrl",
+              title: "Custom Icon URL",
+              type: "url",
+              hidden: ({ parent }) => parent?.icon !== "custom",
+              description: "Optional: URL to an SVG or PNG to use as the icon when 'Custom URL' is selected",
+            }),
             {
               name: "internalPage",
               type: "reference",
@@ -254,44 +303,6 @@ export const navbarSettingsType = defineType({
         },
       ],
       validation: (Rule) => Rule.max(2).warning("Limit to 2 action buttons for best UX"),
-    }),
-    defineField({
-      name: "mobileLinks",
-      title: "Mobile Menu Links",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          name: "mobileLink",
-          fields: [
-            { name: "label", type: "string", title: "Label" },
-            {
-              name: "linkType",
-              type: "string",
-              title: "Link Type",
-              options: {
-                list: [
-                  { title: "Internal Page", value: "internal" },
-                  { title: "External URL", value: "external" },
-                ],
-              },
-              initialValue: "internal",
-            },
-            {
-              name: "internalPage",
-              type: "reference",
-              to: [{ type: "page" }],
-              hidden: ({ parent }) => parent?.linkType !== "internal",
-            },
-            {
-              name: "externalUrl",
-              type: "url",
-              hidden: ({ parent }) => parent?.linkType !== "external",
-            },
-          ],
-        },
-      ],
-      description: "Optional: Alternative links shown only in mobile menu",
     }),
   ],
   preview: {

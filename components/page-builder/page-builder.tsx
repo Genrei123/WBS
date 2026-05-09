@@ -12,6 +12,7 @@ import { GalleryViewer } from "../graphic-design/default";
 import HeadlessPageBuilderDemo from "../headless-page-builder/default";
 import WebDesignPage from "../web-design/default";
 import PDFAutomation from "../pdf-automation/default";
+import BentoBoxSection from "../sections/bento-box/default";
 
 type PageSection = {
   _key?: string;
@@ -64,6 +65,17 @@ type PageSection = {
   columns?: number;
   gap?: string;
   items?: PageSection[];
+  bentoBoxes?: Array<{
+    _key?: string;
+    title?: string;
+    subtitle?: string;
+    url?: string;
+    image?: any;
+    hoverAction?: "moveUp" | "moveSideways" | "zoomIn" | "zoomOut" | "morph";
+    morphImage?: any;
+    hasGlow?: boolean;
+    glowColor?: "orange" | "blue" | "white" | "green";
+  }>;
 };
 
 type PageBuilderProps = {
@@ -585,6 +597,26 @@ export function PageBuilder({
             return (
               <section key={key} data-sanity={sectionAttr} className={cn(baseSectionClass, "py-20")}>
                 <WebDesignPage/>
+              </section>
+            );
+
+          case "bentoBoxSection":
+            return (
+              <section
+                key={key}
+                data-sanity={sectionAttr}
+                className={baseSectionClass}
+                style={{
+                  paddingTop: section.paddingTop ?? 96,
+                  paddingBottom: section.paddingBottom ?? 96,
+                }}
+              >
+                <BentoBoxSection
+                  eyebrow={section.eyebrow}
+                  title={section.title}
+                  description={section.description}
+                  bentoBoxes={section.bentoBoxes}
+                />
               </section>
             );
         }

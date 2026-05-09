@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 
 import LaunchUI from "../logos/launch-ui";
 import { Button } from "./button";
+import SocialIcon from "./social-icon";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -22,6 +23,8 @@ import {
 interface DropdownItem {
   text: string;
   href: string;
+  icon?: string;
+  iconUrl?: string;
 }
 
 interface NavigationItemStructure {
@@ -31,6 +34,8 @@ interface NavigationItemStructure {
   dropdownVariant?: "none" | "standard" | "featured";
   dropdownItems?: DropdownItem[];
   featuredItem?: DropdownItem;
+  icon?: string;
+  iconUrl?: string;
 }
 
 interface ComponentItem {
@@ -164,7 +169,16 @@ export default function Navigation({
                     target={isExternal(item.href) ? "_blank" : undefined}
                     rel={isExternal(item.href) ? "noopener noreferrer" : undefined}
                   >
-                    {item.text}
+                        {item.icon ? (
+                          <span className="mr-2 inline-block align-middle text-muted-foreground">
+                            {item.icon === "custom" && item.iconUrl ? (
+                              <img src={item.iconUrl} alt="" className="inline-block h-4 w-4 object-contain" />
+                            ) : (
+                              <SocialIcon name={item.icon} className="inline-block" />
+                            )}
+                          </span>
+                        ) : null}
+                        {item.text}
                   </a>
                 </NavigationMenuLink>
               ) : (
