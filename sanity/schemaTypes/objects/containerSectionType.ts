@@ -103,6 +103,8 @@ export const containerSectionType = defineType({
         defineArrayMember({type: 'headlessPageBuilderDemo'}),
         defineArrayMember({type: 'graphicDesign'}),
         defineArrayMember({type: 'webDesign'}),
+        defineArrayMember({type: 'bentoBoxSection'}),
+        defineArrayMember({type: 'AIAutomation'}),
       ],
       description: 'Add items to be displayed inside this container',
     }),

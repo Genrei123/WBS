@@ -13,6 +13,7 @@ import HeadlessPageBuilderDemo from "../headless-page-builder/default";
 import WebDesignPage from "../web-design/default";
 import PDFAutomation from "../pdf-automation/default";
 import BentoBoxSection from "../sections/bento-box/default";
+import AIAutomationSection from "../ai-automation/default";
 
 type PageSection = {
   _key?: string;
@@ -70,7 +71,10 @@ type PageSection = {
     title?: string;
     subtitle?: string;
     url?: string;
+    variant?: "default" | "textOnly" | "imageOnly";
+    textAlign?: "left" | "center" | "right";
     image?: any;
+    imageDark?: any;
     hoverAction?: "moveUp" | "moveSideways" | "zoomIn" | "zoomOut" | "morph";
     morphImage?: any;
     hasGlow?: boolean;
@@ -617,6 +621,21 @@ export function PageBuilder({
                   description={section.description}
                   bentoBoxes={section.bentoBoxes}
                 />
+              </section>
+            );
+
+          case "AIAutomation":
+            return (
+              <section
+                key={key}
+                data-sanity={sectionAttr}
+                className={baseSectionClass}
+                style={{
+                  paddingTop: section.paddingTop ?? 96,
+                  paddingBottom: section.paddingBottom ?? 96,
+                }}
+              >
+                <AIAutomationSection />
               </section>
             );
         }

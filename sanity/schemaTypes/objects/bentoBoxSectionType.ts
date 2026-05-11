@@ -36,6 +36,20 @@ export const bentoBoxSectionType = defineType({
           name: 'bentoBox',
           fields: [
             defineField({
+              name: 'variant',
+              title: 'Card Variant',
+              type: 'string',
+              options: {
+                list: [
+                  {title: 'Default (Text + Image)', value: 'default'},
+                  {title: 'Text Only', value: 'textOnly'},
+                  {title: 'Image Only', value: 'imageOnly'},
+                ],
+                layout: 'radio',
+              },
+              initialValue: 'default',
+            }),
+            defineField({
               name: 'title',
               title: 'Title',
               type: 'string',
@@ -52,15 +66,27 @@ export const bentoBoxSectionType = defineType({
               title: 'Hoverable Link URL',
               type: 'url',
               description: 'URL to navigate to when the box is clicked',
-              validation: Rule => Rule.uri({scheme: ['http', 'https', 'mailto', 'tel']})
+              validation: (Rule) => Rule.uri({scheme: ['http', 'https', 'mailto', 'tel']}),
             }),
             defineField({
               name: 'image',
-              title: 'Main Image',
+              title: 'Image (Light Mode)',
+              description: 'Used for the default and image-only variants in light mode',
               type: 'image',
               options: {
                 hotspot: true,
               },
+              hidden: ({parent}) => parent?.variant === 'textOnly',
+            }),
+            defineField({
+              name: 'imageDark',
+              title: 'Image (Dark Mode)',
+              description: 'Optional dark mode image. Falls back to the light mode image if empty.',
+              type: 'image',
+              options: {
+                hotspot: true,
+              },
+              hidden: ({parent}) => parent?.variant === 'textOnly',
             }),
             defineField({
               name: 'hoverAction',
@@ -78,6 +104,21 @@ export const bentoBoxSectionType = defineType({
               },
               initialValue: 'moveUp',
               validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'textAlign',
+              title: 'Text Alignment',
+              type: 'string',
+              options: {
+                list: [
+                  {title: 'Left', value: 'left'},
+                  {title: 'Center', value: 'center'},
+                  {title: 'Right', value: 'right'},
+                ],
+                layout: 'radio',
+              },
+              initialValue: 'left',
+              hidden: ({parent}) => parent?.variant !== 'textOnly',
             }),
             defineField({
               name: 'morphImage',

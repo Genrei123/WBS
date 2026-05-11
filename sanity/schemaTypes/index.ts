@@ -21,6 +21,7 @@ import {siteSettingsType} from './objects/siteSettingsType'
 import {spacerSectionType} from './objects/spacerSectionType'
 import { webDesign } from './objects/webDesign'
 import {bentoBoxSectionType} from './objects/bentoBoxSectionType'
+import { AIAutomation } from './objects/aiAutomations'
 
 
 export const schema: { types: SchemaTypeDefinition[] } = {
@@ -45,6 +46,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     graphicDesign,
     benefitGridSectionType,
     webDesign,
-    bentoBoxSectionType
+    bentoBoxSectionType,
+    AIAutomation,
   ],
 }

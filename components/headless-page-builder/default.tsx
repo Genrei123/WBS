@@ -863,14 +863,14 @@ export default function HeadlessPageBuilderDemo({
 
         <main
           className={cn(
-            "relative flex h-[min(820px,calc(100vh-7rem))] min-h-[620px] flex-col overflow-hidden bg-[#090a0f] p-4 sm:p-6",
+            "relative flex h-[min(820px,calc(100vh-7rem))] min-h-155 flex-col overflow-hidden bg-[#090a0f] p-4 sm:p-6",
             isFullscreen && "h-[calc(100vh-65px)] min-h-0"
           )}
         >
           <div
             className={cn(
               "mb-4 flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between",
-              editingBlock && "md:pr-[410px]"
+              editingBlock && "md:pr-102.5"
             )}
           >
             <div>
@@ -888,7 +888,7 @@ export default function HeadlessPageBuilderDemo({
             </div>
           </div>
 
-          <div className={cn("relative min-h-0 flex-1 overflow-hidden", editingBlock && "md:pr-[410px]")}>
+          <div className={cn("relative min-h-0 flex-1 overflow-hidden", editingBlock && "md:pr-102.5")}>
             <div
               onContextMenu={(event) => openContextMenu(event)}
               className={cn(
@@ -956,7 +956,7 @@ export default function HeadlessPageBuilderDemo({
                   })}
                 </div>
               ) : (
-                <div className="border-border text-muted-foreground flex h-full min-h-[420px] flex-col items-center justify-center rounded-xl border border-dashed text-center">
+                <div className="border-border text-muted-foreground flex h-full min-h-105 flex-col items-center justify-center rounded-xl border border-dashed text-center">
                   <Blocks className="mb-4 size-8" />
                   <p className="font-medium">Right-click here to add a module.</p>
                   <p className="mt-2 max-w-sm text-sm">The menu will let you add a Hero, Rich Text, Media, CTA, Card Grid, or Spacer block.</p>
@@ -1079,7 +1079,7 @@ export default function HeadlessPageBuilderDemo({
           ) : null}
 
           {editingBlock ? (
-            <div className="fixed inset-x-4 bottom-4 z-40 mx-auto flex max-h-[78vh] max-w-3xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#121520] text-white shadow-2xl shadow-black/50 md:absolute md:inset-y-0 md:right-0 md:left-auto md:mx-0 md:h-full md:max-h-none md:w-[390px] md:max-w-none md:rounded-r-none">
+            <div className="fixed inset-x-4 bottom-4 z-40 mx-auto flex max-h-[78vh] max-w-3xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#121520] text-white shadow-2xl shadow-black/50 md:absolute md:inset-y-0 md:right-0 md:left-auto md:mx-0 md:h-full md:max-h-none md:w-97.5 md:max-w-none md:rounded-r-none">
               <div className="border-white/10 flex shrink-0 items-center justify-between border-b px-4 py-3">
                 <div>
                   <p className="flex items-center gap-2 text-sm font-semibold">

@@ -140,7 +140,15 @@ export const pageBySlugQuery = groq`
         title,
         subtitle,
         url,
+        variant,
+        textAlign,
         image{
+          asset->{_id, url},
+          alt,
+          hotspot,
+          crop
+        },
+        imageDark{
           asset->{_id, url},
           alt,
           hotspot,
@@ -217,7 +225,15 @@ export const pageBySlugQuery = groq`
           title,
           subtitle,
           url,
+          variant,
+          textAlign,
           image{
+            asset->{_id, url},
+            alt,
+            hotspot,
+            crop
+          },
+          imageDark{
             asset->{_id, url},
             alt,
             hotspot,
