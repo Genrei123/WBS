@@ -12,6 +12,7 @@ import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch, SanityLive } from "@/sanity/lib/live";
 import { footerQuery, navbarQuery, siteSettingsQuery } from "@/sanity/lib/queries";
 
+import { refreshAndRevalidate } from "./actions/refresh";
 import { siteConfig } from "../config/site";
 
 
@@ -132,8 +133,12 @@ export default async function RootLayout({
             brandName={siteSettings?.brandName}
             logo={siteSettings?.logo}
           />
-          {isEnabled ? <VisualEditing /> : null}
-          <SanityLive />
+          {isEnabled && (
+            <>
+              <VisualEditing />
+              <SanityLive revalidateSyncTags={refreshAndRevalidate} />
+            </>
+          )}
         </ThemeProvider>
       </body>
     </html>

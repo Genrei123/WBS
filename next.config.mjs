@@ -5,6 +5,9 @@ const root = dirname(fileURLToPath(import.meta.url));
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    prefetchInlining: true,
+  },
   turbopack: {
     root,
   },
