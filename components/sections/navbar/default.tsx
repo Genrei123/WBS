@@ -47,6 +47,7 @@ interface NavigationItem {
   dropdownItems?: DropdownItem[];
   featuredItem?: FeaturedItem;
   icon?: string;
+  iconUrl?: string;
 }
 
 interface NavbarAction {
