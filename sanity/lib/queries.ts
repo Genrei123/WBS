@@ -1,4 +1,4 @@
-import {groq} from 'next-sanity'
+import { groq } from "next-sanity";
 
 export const siteSettingsQuery = groq`
   *[_id == "siteSettings"][0]{
@@ -16,7 +16,7 @@ export const siteSettingsQuery = groq`
       alt
     }
   }
-`
+`;
 
 export const navbarQuery = groq`
   *[_type == "navbarSettings"][0]{
@@ -65,7 +65,7 @@ export const navbarQuery = groq`
       variant
     }
   }
-`
+`;
 
 export const footerQuery = groq`
   *[_type == "footerSettings"][0]{
@@ -89,7 +89,7 @@ export const footerQuery = groq`
       externalUrl
     }
   }
-`
+`;
 
 export const pageBySlugQuery = groq`
   *[_type == "page" && slug.current == $slug][0]{
@@ -163,6 +163,20 @@ export const pageBySlugQuery = groq`
         },
         hasGlow,
         glowColor
+      },
+      tabs[]{
+        _key,
+        title,
+        heading,
+        description,
+        ctaLabel,
+        ctaHref,
+        image{
+          asset->{_id, url},
+          alt,
+          hotspot,
+          crop
+        }
       },
       items[]{
         _key,
@@ -252,4 +266,4 @@ export const pageBySlugQuery = groq`
       }
     }
   }
-`
+`;

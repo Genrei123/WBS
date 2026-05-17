@@ -52,6 +52,8 @@ export const pageType = defineType({
         defineArrayMember({type: 'benefitGridSection'}),
         defineArrayMember({type: 'webDesign'}),
         defineArrayMember({type: 'bentoBoxSection'}),
+        defineArrayMember({type: 'tabPaneSection'}),
+        defineArrayMember({type: 'AIAutomation'}),
       ],
       description: 'Add and reorder the sections rendered on this page.',
     }),

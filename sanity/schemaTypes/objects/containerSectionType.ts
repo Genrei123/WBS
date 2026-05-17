@@ -105,6 +105,7 @@ export const containerSectionType = defineType({
         defineArrayMember({type: 'webDesign'}),
         defineArrayMember({type: 'bentoBoxSection'}),
         defineArrayMember({type: 'AIAutomation'}),
+        defineArrayMember({type: 'tabPaneSection'}),
       ],
       description: 'Add items to be displayed inside this container',
     }),

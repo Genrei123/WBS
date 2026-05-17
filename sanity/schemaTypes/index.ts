@@ -22,7 +22,7 @@ import {spacerSectionType} from './objects/spacerSectionType'
 import { webDesign } from './objects/webDesign'
 import {bentoBoxSectionType} from './objects/bentoBoxSectionType'
 import { AIAutomation } from './objects/aiAutomations'
-
+import { tabPaneSectionType } from './objects/tabPane'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -48,5 +48,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     webDesign,
     bentoBoxSectionType,
     AIAutomation,
+    tabPaneSectionType,
   ],
 }

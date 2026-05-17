@@ -14,6 +14,7 @@ import WebDesignPage from "../web-design/default";
 import PDFAutomation from "../pdf-automation/default";
 import BentoBoxSection from "../sections/bento-box/default";
 import AIAutomationSection from "../ai-automation/default";
+import TabPane from "../sections/tab-pane/default";
 
 type PageSection = {
   _key?: string;
@@ -79,6 +80,20 @@ type PageSection = {
     morphImage?: any;
     hasGlow?: boolean;
     glowColor?: "orange" | "blue" | "white" | "green";
+  }>;
+  tabs?: Array<{
+    _key?: string;
+    title: string;
+    heading?: string;
+    description?: string;
+    ctaLabel?: string;
+    ctaHref?: string;
+    image?: {
+      asset?: { _id?: string; url?: string };
+      alt?: string;
+      hotspot?: unknown;
+      crop?: unknown;
+    };
   }>;
 };
 
@@ -300,9 +315,9 @@ export function PageBuilder({
             if (align === "right") alignClass = "text-right ml-auto";
 
             return (
-              <section 
-                key={key} 
-                data-sanity={sectionAttr} 
+              <section
+                key={key}
+                data-sanity={sectionAttr}
                 className={baseSectionClass}
                 style={{
                   paddingTop: section.paddingTop ?? 80,
@@ -317,7 +332,7 @@ export function PageBuilder({
                     <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">{section.title}</h2>
                   ) : null}
                   {section.body ? (
-                    <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none text-muted-foreground">
+                    <div className="prose prose-sm md:prose-base dark:prose-invert text-muted-foreground max-w-none">
                       <PortableText value={section.body} />
                     </div>
                   ) : null}
@@ -337,7 +352,7 @@ export function PageBuilder({
                     <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{section.title}</h2>
                   ) : null}
                   {section.body ? (
-                    <div className="prose prose-sm md:prose-base dark:prose-invert mx-auto mt-4 max-w-2xl text-muted-foreground">
+                    <div className="prose prose-sm md:prose-base dark:prose-invert text-muted-foreground mx-auto mt-4 max-w-2xl">
                       <PortableText value={section.body} />
                     </div>
                   ) : null}
@@ -480,7 +495,7 @@ export function PageBuilder({
                       {section.title || "Add a title in Sanity"}
                     </h1>
                     {section.body ? (
-                      <div className="prose prose-sm md:prose-base dark:prose-invert max-w-2xl text-muted-foreground">
+                      <div className="prose prose-sm md:prose-base dark:prose-invert text-muted-foreground max-w-2xl">
                         <PortableText value={section.body} />
                       </div>
                     ) : null}
@@ -589,18 +604,14 @@ export function PageBuilder({
                   paddingBottom: section.paddingBottom ?? 96,
                 }}
               >
-                <BenefitGrid
-                  eyebrow={section.eyebrow}
-                  title={section.title}
-                  benefits={section.benefits}
-                />
-            </section>
-              );
-            
+                <BenefitGrid eyebrow={section.eyebrow} title={section.title} benefits={section.benefits} />
+              </section>
+            );
+
           case "webDesign":
             return (
               <section key={key} data-sanity={sectionAttr} className={cn(baseSectionClass, "py-20")}>
-                <WebDesignPage/>
+                <WebDesignPage />
               </section>
             );
 
@@ -636,6 +647,24 @@ export function PageBuilder({
                 }}
               >
                 <AIAutomationSection />
+              </section>
+            );
+
+          case "tabPaneSection":
+              console.log("tabPaneSection data:", JSON.stringify(section, null, 2));
+
+            return (
+              
+              <section
+                key={key}
+                data-sanity={sectionAttr}
+                className={baseSectionClass}
+                style={{
+                  paddingTop: section.paddingTop ?? 96,
+                  paddingBottom: section.paddingBottom ?? 96,
+                }}
+              >
+                <TabPane tabs={section.tabs} />
               </section>
             );
         }
