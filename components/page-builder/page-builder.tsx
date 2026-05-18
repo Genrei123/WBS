@@ -15,6 +15,7 @@ import PDFAutomation from "../pdf-automation/default";
 import BentoBoxSection from "../sections/bento-box/default";
 import AIAutomationSection from "../ai-automation/default";
 import TabPane from "../sections/tab-pane/default";
+import HeroLanding from "../sections/hero-landing/default";
 
 type PageSection = {
   _key?: string;
@@ -614,7 +615,26 @@ export function PageBuilder({
                 <WebDesignPage />
               </section>
             );
-
+          case "heroLanding":
+            return (
+              <section
+                key={key}
+                data-sanity={sectionAttr}
+                className="contents"
+              >
+                <HeroLanding
+                  eyebrow={section.eyebrow}
+                  title={section.title}
+                  description={section.description}
+                  primaryCtaLabel={section.primaryCtaLabel}
+                  primaryCtaHref={section.primaryCtaHref}
+                  secondaryCtaLabel={section.secondaryCtaLabel}
+                  secondaryCtaHref={section.secondaryCtaHref}
+                  image={section.image}
+                  imageDark={section.imageDark}
+                />
+              </section>
+            );
           case "bentoBoxSection":
             return (
               <section

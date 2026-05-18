@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
 import { urlFor } from "@/sanity/lib/image";
@@ -12,7 +13,13 @@ type Tab = {
   description?: string;
   ctaLabel?: string;
   ctaHref?: string;
-  image?: {
+  lightImage?: {
+    asset?: { _id?: string; url?: string };
+    alt?: string;
+    hotspot?: unknown;
+    crop?: unknown;
+  };
+  darkImage?: {
     asset?: { _id?: string; url?: string };
     alt?: string;
     hotspot?: unknown;
@@ -26,12 +33,21 @@ type TabPaneProps = {
 
 export default function TabPane({ tabs }: TabPaneProps) {
   const [activeIdx, setActiveIdx] = useState(0);
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (!tabs || tabs.length === 0) return null;
 
   const activeTab = tabs[activeIdx];
-  const imgSrc = activeTab?.image?.asset
-    ? urlFor(activeTab.image).width(900).height(700).fit("crop").url()
+  
+  // Determine which image to use based on theme
+  const imageToUse = mounted && theme === "dark" ? activeTab?.darkImage : activeTab?.lightImage;
+  const imgSrc = imageToUse?.asset
+    ? urlFor(imageToUse).width(900).height(700).fit("crop").url()
     : null;
 
   return (
@@ -108,9 +124,9 @@ export default function TabPane({ tabs }: TabPaneProps) {
         <AnimatePresence mode="wait">
           {imgSrc ? (
             <motion.img
-              key={activeIdx}
+              key={`${activeIdx}-${theme}`}
               src={imgSrc}
-              alt={activeTab?.image?.alt || activeTab?.heading || ""}
+              alt={imageToUse?.alt || activeTab?.heading || ""}
               initial={{ opacity: 0, scale: 1.04 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.97 }}

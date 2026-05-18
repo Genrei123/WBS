@@ -96,6 +96,7 @@ export const containerSectionType = defineType({
       type: 'array',
       of: [
         defineArrayMember({type: 'cardButtonSection'}),
+        defineArrayMember({type: 'heroLanding'}),
         defineArrayMember({type: 'imageSection'}),
         defineArrayMember({type: 'richTextSection'}),
         defineArrayMember({type: 'ctaSection'}),

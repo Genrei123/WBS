@@ -23,6 +23,7 @@ import { webDesign } from './objects/webDesign'
 import {bentoBoxSectionType} from './objects/bentoBoxSectionType'
 import { AIAutomation } from './objects/aiAutomations'
 import { tabPaneSectionType } from './objects/tabPane'
+import { heroLandingType } from './objects/heroLandingType'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -49,5 +50,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     bentoBoxSectionType,
     AIAutomation,
     tabPaneSectionType,
+    heroLandingType,
   ],
 }

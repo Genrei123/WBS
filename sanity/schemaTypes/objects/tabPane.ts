@@ -53,7 +53,34 @@ export const tabPaneSectionType = defineType({
             }),
             defineField({
               name: "image",
-              title: "Tab Image",
+              title: "Image (Deprecated - use Light/Dark images)",
+              type: "image",
+              hidden: true,
+              options: { hotspot: true },
+              fields: [
+                defineField({
+                  name: "alt",
+                  title: "Alt Text",
+                  type: "string",
+                }),
+              ],
+            }),
+            defineField({
+              name: "lightImage",
+              title: "Light Mode Image",
+              type: "image",
+              options: { hotspot: true },
+              fields: [
+                defineField({
+                  name: "alt",
+                  title: "Alt Text",
+                  type: "string",
+                }),
+              ],
+            }),
+            defineField({
+              name: "darkImage",
+              title: "Dark Mode Image",
               type: "image",
               options: { hotspot: true },
               fields: [
@@ -72,8 +99,8 @@ export const tabPaneSectionType = defineType({
   preview: {
     select: {
       title: "tabs[0].title",
-      media: "tabs[0].image",
-      alt: "tabs[0].image.alt",
+      media: "tabs[0].lightImage",
+      alt: "tabs[0].lightImage.alt",
     },
     prepare({title, media, alt}) {
       return {
