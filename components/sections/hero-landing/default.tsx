@@ -67,8 +67,8 @@ export default function HeroLanding({
       )}
 
       {/* Content Container */}
-      <div className="relative z-10 w-full max-w-container mx-auto px-6 py-20 sm:px-8 sm:py-32 flex items-center justify-center">
-        <div className="flex flex-col gap-6 text-primary max-w-2xl text-center">
+      <div className="relative z-10 w-full max-w-container mx-auto px-6 py-20 sm:px-8 sm:py-32 flex items-center justify-start">
+        <div className="flex flex-col gap-6 text-primary dark:text-[#E0C9A6] max-w-2xl text-start">
           {eyebrow && (
             <div className="text-sm font-semibold uppercase tracking-wider opacity-90">
               {eyebrow}
@@ -76,19 +76,19 @@ export default function HeroLanding({
           )}
 
           {title && (
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-left">
               {title}
             </h1>
           )}
 
           {description && (
-            <p className="text-lg sm:text-xl opacity-95 leading-relaxed">
+            <p className="text-lg sm:text-xl opacity-95 leading-relaxed text-left">
               {description}
             </p>
           )}
 
           {(primaryCtaLabel || secondaryCtaLabel) && (
-            <div className="flex flex-wrap gap-4 pt-4 justify-center">
+            <div className="flex flex-wrap gap-4 pt-4 justify-start">
               {primaryCtaLabel && primaryCtaHref && (
                 <a
                   href={primaryCtaHref}

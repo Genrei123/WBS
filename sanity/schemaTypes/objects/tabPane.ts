@@ -9,6 +9,26 @@ export const tabPaneSectionType = defineType({
   icon: BlockElementIcon,
   fields: [
     defineField({
+      name: "title",
+      title: "Title",
+      type: "string",
+    }),
+    defineField({
+      name: "titleColor",
+      title: "Title Color",
+      type: "string",
+      options: {
+        list: [
+          {title: 'Primary', value: 'primary'},
+          {title: 'Secondary', value: 'secondary'},
+          {title: 'Accent', value: 'accent'},
+          {title: 'Default', value: 'default'},
+        ],
+        layout: 'dropdown',
+      },
+      initialValue: 'primary',
+    }),
+    defineField({
       name: "tabs",
       title: "Tabs",
       type: "array",

@@ -18,6 +18,21 @@ export const heroSectionType = defineType({
       type: 'string',
     }),
     defineField({
+      name: 'titleColor',
+      title: 'Title Color',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Primary', value: 'primary'},
+          {title: 'Secondary', value: 'secondary'},
+          {title: 'Accent', value: 'accent'},
+          {title: 'Default', value: 'default'},
+        ],
+        layout: 'dropdown',
+      },
+      initialValue: 'primary',
+    }),
+    defineField({
       name: 'body',
       title: 'Body',
       type: 'blockContent',

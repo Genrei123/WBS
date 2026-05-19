@@ -29,9 +29,11 @@ type Tab = {
 
 type TabPaneProps = {
   tabs?: Tab[];
+  title?: string;
+  titleColor?: string;
 };
 
-export default function TabPane({ tabs }: TabPaneProps) {
+export default function TabPane({ tabs, title, titleColor }: TabPaneProps) {
   const [activeIdx, setActiveIdx] = useState(0);
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -50,8 +52,23 @@ export default function TabPane({ tabs }: TabPaneProps) {
     ? urlFor(imageToUse).width(900).height(700).fit("crop").url()
     : null;
 
+  // Map titleColor to Tailwind classes
+  const titleColorClasses = {
+    primary: "text-primary",
+    secondary: "text-secondary",
+    accent: "text-accent",
+    default: "text-foreground",
+  };
+  const titleColorClass = titleColorClasses[(titleColor || "primary") as keyof typeof titleColorClasses] || titleColorClasses.primary;
+
   return (
-    <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16 items-center">
+    <>
+      {title && (
+        <h2 style={{ color: "hsl(var(--primary))" }} className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight mb-10">
+          {title}
+        </h2>
+      )}
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16 items-center">
       {/* Left: tabs + content */}
       <div className="flex flex-col gap-8">
         {/* Tab pills */}
@@ -62,7 +79,7 @@ export default function TabPane({ tabs }: TabPaneProps) {
               <button
                 key={tab._key || tab.title}
                 onClick={() => setActiveIdx(idx)}
-                className="relative px-4 py-2 rounded-full text-sm transition-colors"
+                className="relative px-4 py-2 rounded-full text-sm transition-colors cursor-pointer"
                 style={{ transformStyle: "preserve-3d" }}
               >
                 {isActive && (
@@ -146,6 +163,7 @@ export default function TabPane({ tabs }: TabPaneProps) {
           )}
         </AnimatePresence>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

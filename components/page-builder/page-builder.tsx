@@ -22,6 +22,7 @@ type PageSection = {
   _type?: string;
   eyebrow?: string;
   title?: string;
+  titleColor?: string;
   body?: any;
   description?: string;
   primaryCtaLabel?: string;
@@ -469,6 +470,16 @@ export function PageBuilder({
 
             const hasAnyImage = imgSrc || imgSrcDark;
 
+            // Map titleColor to Tailwind classes
+            const titleColorClasses = {
+              primary: "text-primary",
+              secondary: "text-secondary",
+              accent: "text-accent",
+              default: "text-foreground",
+            };
+            const titleColor = (section.titleColor || "primary") as keyof typeof titleColorClasses;
+            const titleColorClass = titleColorClasses[titleColor] || titleColorClasses.primary;
+
             return (
               <section
                 key={key}
@@ -492,7 +503,7 @@ export function PageBuilder({
                     {section.eyebrow ? (
                       <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase">{section.eyebrow}</p>
                     ) : null}
-                    <h1 className="text-4xl font-semibold tracking-tight sm:text-6xl lg:text-7xl">
+                    <h1 className={cn("text-4xl font-semibold tracking-tight sm:text-6xl lg:text-7xl", titleColorClass)}>
                       {section.title || "Add a title in Sanity"}
                     </h1>
                     {section.body ? (
@@ -684,7 +695,7 @@ export function PageBuilder({
                   paddingBottom: section.paddingBottom ?? 96,
                 }}
               >
-                <TabPane tabs={section.tabs} />
+                <TabPane tabs={section.tabs} title={section.title} titleColor={section.titleColor} />
               </section>
             );
         }
