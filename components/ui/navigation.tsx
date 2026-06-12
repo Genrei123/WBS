@@ -73,14 +73,12 @@ export default function Navigation({
     {
       title: "Alert Dialog",
       href: `${siteConfig.url}/docs/primitives/alert-dialog`,
-      description:
-        "A modal dialog that interrupts the user with important content and expects a response.",
+      description: "A modal dialog that interrupts the user with important content and expects a response.",
     },
     {
       title: "Hover Card",
       href: `${siteConfig.url}/docs/primitives/hover-card`,
-      description:
-        "For sighted users to preview content available behind a link.",
+      description: "For sighted users to preview content available behind a link.",
     },
     {
       title: "Progress",
@@ -96,8 +94,7 @@ export default function Navigation({
     {
       title: "Tabs",
       href: `${siteConfig.url}/docs/primitives/tabs`,
-      description:
-        "A set of layered sections of content, known as tab panels, that are displayed one at a time.",
+      description: "A set of layered sections of content, known as tab panels, that are displayed one at a time.",
     },
     {
       title: "Tooltip",
@@ -160,26 +157,14 @@ export default function Navigation({
           {structure.map((item) => (
             <NavigationMenuItem key={item.text}>
               {!item.hasDropdown ? (
-                <NavigationMenuLink
-                  className={navigationMenuTriggerStyle()}
-                  asChild
-                >
-                  <a 
+                <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
+                  <a
                     href={item.href || "/"}
                     target={isExternal(item.href) ? "_blank" : undefined}
                     rel={isExternal(item.href) ? "noopener noreferrer" : undefined}
-                    className="flex-row gap-0! content-start"
+                    className="flex-row content-start gap-0!"
                   >
-                        {item.icon ? (
-                          <span className="mr-2 inline-block align-middle text-muted-foreground">
-                            {item.icon === "custom" && item.iconUrl ? (
-                              <img src={item.iconUrl} alt="" className="inline-block h-4 w-4 object-contain" />
-                            ) : (
-                              <SocialIcon name={item.icon} className="inline-block" />
-                            )}
-                          </span>
-                        ) : null}
-                        {item.text}
+                    {item.text}
                   </a>
                 </NavigationMenuLink>
               ) : (
@@ -189,26 +174,17 @@ export default function Navigation({
                     {item.dropdownVariant === "featured" ? (
                       // Featured variant: main button takes ~50% on right
                       <div className="flex w-[500px] gap-0">
-                        <ul className="flex-1 grid gap-3 p-4">
+                        <ul className="grid flex-1 gap-3 p-4">
                           {item.dropdownItems?.map((dropItem) => (
-                            <ListItem
-                              key={dropItem.text}
-                              href={dropItem.href}
-                              title={dropItem.text}
-                              
-                            >
+                            <ListItem key={dropItem.text} href={dropItem.href} title={dropItem.text}>
                               {/* No description for featured variant */}
                             </ListItem>
                           ))}
                         </ul>
                         {item.featuredItem && (
-                          <div className="flex-1 flex flex-col items-center justify-center p-6 bg-muted/30 rounded-r-md border-l border-border">
-                            <Button
-                              asChild
-                              size="lg"
-                              className="w-full"
-                            >
-                              <a 
+                          <div className="bg-muted/30 border-border flex flex-1 flex-col items-center justify-center rounded-r-md border-l p-6">
+                            <Button asChild size="lg" className="w-full">
+                              <a
                                 href={item.featuredItem.href}
                                 target={isExternal(item.featuredItem.href) ? "_blank" : undefined}
                                 rel={isExternal(item.featuredItem.href) ? "noopener noreferrer" : undefined}
@@ -223,11 +199,7 @@ export default function Navigation({
                       // Standard variant: simple list
                       <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                         {item.dropdownItems?.map((dropItem) => (
-                          <ListItem
-                            key={dropItem.text}
-                            title={dropItem.text}
-                            href={dropItem.href}
-                          >
+                          <ListItem key={dropItem.text} title={dropItem.text} href={dropItem.href}>
                             {/* Add description if available */}
                           </ListItem>
                         ))}
@@ -250,10 +222,7 @@ export default function Navigation({
         {itemsToRender.map((item) => (
           <NavigationMenuItem key={item.title}>
             {item.isLink ? (
-              <NavigationMenuLink
-                className={navigationMenuTriggerStyle()}
-                asChild
-              >
+              <NavigationMenuLink className={navigationMenuTriggerStyle()} asChild>
                 <Link href={item.href || ""}>{item.title}</Link>
               </NavigationMenuLink>
             ) : (
@@ -269,21 +238,13 @@ export default function Navigation({
                             href={logoHref}
                           >
                             {logo}
-                            <div className="mt-4 mb-2 text-lg font-medium">
-                              {logoTitle}
-                            </div>
-                            <p className="text-muted-foreground text-sm leading-tight">
-                              {logoDescription}
-                            </p>
+                            <div className="mt-4 mb-2 text-lg font-medium">{logoTitle}</div>
+                            <p className="text-muted-foreground text-sm leading-tight">{logoDescription}</p>
                           </a>
                         </NavigationMenuLink>
                       </li>
                       {introItems.map((intro) => (
-                        <ListItem
-                          key={intro.title}
-                          href={intro.href}
-                          title={intro.title}
-                        >
+                        <ListItem key={intro.title} href={intro.href} title={intro.title}>
                           {intro.description}
                         </ListItem>
                       ))}
@@ -291,11 +252,7 @@ export default function Navigation({
                   ) : item.content === "components" ? (
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                       {components.map((component) => (
-                        <ListItem
-                          key={component.title}
-                          title={component.title}
-                          href={component.href}
-                        >
+                        <ListItem key={component.title} title={component.title} href={component.href}>
                           {component.description}
                         </ListItem>
                       ))}
@@ -313,12 +270,7 @@ export default function Navigation({
   );
 }
 
-function ListItem({
-  className,
-  title,
-  children,
-  ...props
-}: React.ComponentProps<"a"> & { title: string }) {
+function ListItem({ className, title, children, ...props }: React.ComponentProps<"a"> & { title: string }) {
   return (
     <li>
       <NavigationMenuLink asChild>
@@ -326,14 +278,12 @@ function ListItem({
           data-slot="list-item"
           className={cn(
             "hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block space-y-1 rounded-md p-3 leading-none no-underline outline-hidden transition-colors select-none",
-            className,
+            className
           )}
           {...props}
         >
           <div className="text-sm leading-none font-medium">{title}</div>
-          <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
-            {children}
-          </p>
+          <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">{children}</p>
         </a>
       </NavigationMenuLink>
     </li>
