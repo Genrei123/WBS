@@ -1,7 +1,4 @@
 import { ReactNode } from "react";
-
-import { siteConfig } from "@/config/site";
-
 import Figma from "../../logos/figma";
 import React from "../../logos/react";
 import ShadcnUi from "../../logos/shadcn-ui";
@@ -22,7 +19,7 @@ export default function Logos({
   title = "Built with industry-standard tools and best practices",
   badge = (
     <Badge variant="outline" className="border-brand/30 text-brand">
-      Last updated: {siteConfig.stats.updated}
+      
     </Badge>
   ),
   logos = [

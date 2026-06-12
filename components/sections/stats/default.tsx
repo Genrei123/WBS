@@ -1,5 +1,3 @@
-import { siteConfig } from "@/config/site";
-
 import { Section } from "../../ui/section";
 
 interface StatItemProps {
@@ -21,24 +19,24 @@ function formatToThousands(value: number) {
 const DEFAULT_STATS: StatItemProps[] = [
   {
     label: "used by",
-    value: formatToThousands(siteConfig.stats.figma),
+    value: "",
     suffix: "k",
     description: "designers on Figma Community",
   },
   {
     label: "over",
-    value: siteConfig.stats.github,
+    value: "",
     description: "clones and forks of the template on GitHub",
   },
   {
     label: "already",
-    value: formatToThousands(siteConfig.stats.cli),
+    value: "",
     suffix: "k",
     description: "installations with shadcn/ui CLI",
   },
   {
     label: "includes",
-    value: siteConfig.stats.sections,
+    value: "",
     description: "blocks and sections",
   },
 ];

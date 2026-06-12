@@ -16,6 +16,8 @@ import BentoBoxSection from "../sections/bento-box/default";
 import AIAutomationSection from "../ai-automation/default";
 import TabPane from "../sections/tab-pane/default";
 import HeroLanding from "../sections/hero-landing/default";
+import Pricing from "../sections/pricing/default";
+import FAQ from "../sections/faq/default";
 
 type PageSection = {
   _key?: string;
@@ -503,7 +505,9 @@ export function PageBuilder({
                     {section.eyebrow ? (
                       <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase">{section.eyebrow}</p>
                     ) : null}
-                    <h1 className={cn("text-4xl font-semibold tracking-tight sm:text-6xl lg:text-7xl", titleColorClass)}>
+                    <h1
+                      className={cn("text-4xl font-semibold tracking-tight sm:text-6xl lg:text-7xl", titleColorClass)}
+                    >
                       {section.title || "Add a title in Sanity"}
                     </h1>
                     {section.body ? (
@@ -628,11 +632,7 @@ export function PageBuilder({
             );
           case "heroLanding":
             return (
-              <section
-                key={key}
-                data-sanity={sectionAttr}
-                className="contents"
-              >
+              <section key={key} data-sanity={sectionAttr} className="contents">
                 <HeroLanding
                   eyebrow={section.eyebrow}
                   title={section.title}
@@ -683,7 +683,6 @@ export function PageBuilder({
 
           case "tabPaneSection":
             return (
-              
               <section
                 key={key}
                 data-sanity={sectionAttr}
@@ -694,6 +693,20 @@ export function PageBuilder({
                 }}
               >
                 <TabPane tabs={section.tabs} title={section.title} titleColor={section.titleColor} />
+              </section>
+            );
+
+          case "pricingSection":
+            return (
+              <section key={key} data-sanity={sectionAttr} className={baseSectionClass}>
+                <Pricing />
+              </section>
+            );
+
+          case "faqSection":
+            return (
+              <section key={key} data-sanity={sectionAttr} className={baseSectionClass}>
+                <FAQ />
               </section>
             );
         }

@@ -3,13 +3,9 @@
 import Link from "next/link";
 import * as React from "react";
 import { ReactNode } from "react";
-
-import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
-
 import LaunchUI from "../logos/launch-ui";
 import { Button } from "./button";
-import SocialIcon from "./social-icon";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -72,33 +68,33 @@ export default function Navigation({
   components = [
     {
       title: "Alert Dialog",
-      href: `${siteConfig.url}/docs/primitives/alert-dialog`,
+      href: ``,
       description: "A modal dialog that interrupts the user with important content and expects a response.",
     },
     {
       title: "Hover Card",
-      href: `${siteConfig.url}/docs/primitives/hover-card`,
+      href: ``,
       description: "For sighted users to preview content available behind a link.",
     },
     {
       title: "Progress",
-      href: `${siteConfig.url}/docs/primitives/progress`,
+      href: ``,
       description:
         "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
     },
     {
       title: "Scroll Area",
-      href: `${siteConfig.url}/docs/primitives/scroll-area`,
+      href: ``,
       description: "A scrollable container with custom scrollbars.",
     },
     {
       title: "Tabs",
-      href: `${siteConfig.url}/docs/primitives/tabs`,
+      href: ``,
       description: "A set of layered sections of content, known as tab panels, that are displayed one at a time.",
     },
     {
       title: "Tooltip",
-      href: `${siteConfig.url}/docs/primitives/tooltip`,
+      href: ``,
       description:
         "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
     },
@@ -106,21 +102,21 @@ export default function Navigation({
   logo = <LaunchUI />,
   logoTitle = "Launch UI",
   logoDescription = "Landing page template built with React, Shadcn/ui and Tailwind that you can copy/paste into your project.",
-  logoHref = siteConfig.getStartedUrl,
+  logoHref = "",
   introItems = [
     {
       title: "Introduction",
-      href: siteConfig.getStartedUrl,
+      href: "",
       description: "Reusable components built using Radix UI and Tailwind CSS.",
     },
     {
       title: "Installation",
-      href: siteConfig.getStartedUrl,
+      href: "",
       description: "How to install dependencies and structure your app.",
     },
     {
       title: "Typography",
-      href: siteConfig.getStartedUrl,
+      href: "",
       description: "Styles for headings, paragraphs, and lists.",
     },
   ],
@@ -138,7 +134,7 @@ export default function Navigation({
     {
       title: "Documentation",
       isLink: true,
-      href: siteConfig.getStartedUrl,
+      href: "",
     },
   ];
 

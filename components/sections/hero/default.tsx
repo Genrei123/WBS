@@ -1,9 +1,6 @@
 import { ArrowRightIcon } from "lucide-react";
 import { ReactNode } from "react";
-
-import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
-
 import Github from "../../logos/github";
 import { Badge } from "../../ui/badge";
 import Glow from "../../ui/glow";
@@ -27,12 +24,12 @@ interface HeroProps {
 
 const DEFAULT_HERO_BUTTONS: HeroButtonProps[] = [
   {
-    href: siteConfig.getStartedUrl,
+    href: "/",
     text: "Get Started",
     variant: "default",
   },
   {
-    href: siteConfig.links.github,
+    href: "/",
     text: "GitHub",
     variant: "glow",
     icon: <Github className="mr-2 size-4" />,
@@ -44,7 +41,7 @@ const DEFAULT_HERO_BADGE = (
     <span className="text-muted-foreground">
       New version of Launch UI is out!
     </span>
-    <a href={siteConfig.getStartedUrl} className="flex items-center gap-1">
+    <a href={"/"} className="flex items-center gap-1">
       Get started
       <ArrowRightIcon className="size-3" />
     </a>

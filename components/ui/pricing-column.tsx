@@ -21,17 +21,26 @@ const pricingColumnVariants = cva(
     defaultVariants: {
       variant: "default",
     },
-  },
+  }
 );
 
+type Currency = "usd" | "php";
+
+const CURRENCY_SYMBOLS: Record<Currency, string> = {
+  usd: "$",
+  php: "₱",
+};
+
 export interface PricingColumnProps
-  extends
-    React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof pricingColumnVariants> {
+  extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof pricingColumnVariants> {
   name: string;
   icon?: ReactNode;
   description: string;
-  price: number;
+  price: {
+    usd: number;
+    php: number;
+  };
+  currency?: Currency;
   originalPrice?: number;
   promotionText?: ReactNode;
   priceNote: string;
@@ -48,6 +57,7 @@ export function PricingColumn({
   icon,
   description,
   price,
+  currency = "php",
   originalPrice,
   promotionText,
   priceNote,
@@ -57,86 +67,71 @@ export function PricingColumn({
   className,
   ...props
 }: PricingColumnProps) {
+  const symbol = CURRENCY_SYMBOLS[currency];
+  const amount = price[currency];
+
   return (
-    <div
-      className={cn(pricingColumnVariants({ variant, className }))}
-      {...props}
-    >
+    <div className={cn(pricingColumnVariants({ variant, className }))} {...props}>
       <hr
         className={cn(
           "via-foreground/60 absolute top-0 left-[10%] h-[1px] w-[80%] border-0 bg-linear-to-r from-transparent to-transparent",
-          variant === "glow-brand" && "via-brand",
+          variant === "glow-brand" && "via-brand"
         )}
       />
       <div className="flex flex-col gap-7">
         <header className="flex flex-col gap-2">
           <h2 className="flex items-center gap-2 font-bold">
-            {icon && (
-              <div className="text-muted-foreground flex items-center gap-2">
-                {icon}
-              </div>
-            )}
+            {icon && <div className="text-muted-foreground flex items-center gap-2">{icon}</div>}
             {name}
           </h2>
-          <p className="text-muted-foreground max-w-[220px] text-sm">
-            {description}
-          </p>
+          <p className="text-muted-foreground max-w-[220px] text-sm">{description}</p>
         </header>
         <section className="flex flex-col gap-3">
           {originalPrice !== undefined && (
             <div className="flex h-6 items-baseline gap-1">
               <span className="text-muted-foreground text-lg font-medium line-through">
-                {originalPrice > 0 && price !== originalPrice
-                  ? `$${originalPrice}`
-                  : ""}
+                {originalPrice > 0 && amount !== originalPrice ? `${symbol}${originalPrice}` : ""}
               </span>
             </div>
           )}
-          <div className="flex items-center gap-3 lg:flex-col lg:items-start xl:flex-row xl:items-center">
+          <div className="flex items-center gap-3 lg:flex-col lg:items-start">
             <div className="flex flex-col gap-1">
               <div className="flex items-baseline gap-1">
-                <span className="text-muted-foreground text-2xl font-bold">
-                  $
-                </span>
-                <span className="text-6xl font-bold">{price}</span>
+                <span className="text-muted-foreground text-2xl font-bold">{symbol}</span>
+                <span className="text-6xl font-bold">{amount.toLocaleString()}</span>
               </div>
             </div>
             <div className="flex min-h-[40px] flex-col">
-              {price > 0 && (
+              {amount > 0 && (
                 <>
-                  <span className="text-sm">one-time payment</span>
-                  <span className="text-muted-foreground text-sm">
-                    plus local taxes
-                  </span>
+                  <span className="text-xs">per month</span>
+                  <span className="text-muted-foreground text-xs">plus local taxes</span>
                 </>
               )}
             </div>
           </div>
-          {promotionText && (
-            <div className="text-brand-foreground h-6 text-sm font-medium">
-              {promotionText}
-            </div>
-          )}
+          {promotionText && <div className="text-brand-foreground h-6 text-sm font-medium">{promotionText}</div>}
         </section>
         <Button variant={cta.variant} size="lg" asChild>
           <Link href={cta.href}>{cta.label}</Link>
         </Button>
-        <p className="text-muted-foreground min-h-[40px] max-w-[220px] text-sm">
-          {priceNote}
-        </p>
+        <p className="text-muted-foreground min-h-[40px] max-w-[220px] text-sm">{priceNote}</p>
         <hr className="border-input" />
       </div>
       <div>
         <ul className="flex flex-col gap-2">
-          {features.map((feature, index) => (
-            <li
-              key={`${feature}-${index}`}
-              className="flex items-center gap-2 text-sm"
-            >
-              <CircleCheckBig className="text-muted-foreground size-4 shrink-0" />
-              {feature}
-            </li>
-          ))}
+          {features.map((feature, index) => {
+            const isHeading = feature.endsWith(":");
+            return (
+              <li
+                key={`${feature}-${index}`}
+                className={cn("flex items-center gap-2 text-sm", isHeading && "mt-1 font-semibold")}
+              >
+                {!isHeading && <CircleCheckBig className="text-muted-foreground size-4 shrink-0" />}
+                {feature}
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import {SquareIcon} from '@sanity/icons'
 import {defineArrayMember, defineField, defineType} from 'sanity'
+import { registeredComponents } from '../registerComponents'
 
 export const containerSectionType = defineType({
   name: 'containerSection',
@@ -94,20 +95,7 @@ export const containerSectionType = defineType({
       name: 'items',
       title: 'Items',
       type: 'array',
-      of: [
-        defineArrayMember({type: 'cardButtonSection'}),
-        defineArrayMember({type: 'heroLanding'}),
-        defineArrayMember({type: 'imageSection'}),
-        defineArrayMember({type: 'richTextSection'}),
-        defineArrayMember({type: 'ctaSection'}),
-        defineArrayMember({type: 'pdfAutomation'}),
-        defineArrayMember({type: 'headlessPageBuilderDemo'}),
-        defineArrayMember({type: 'graphicDesign'}),
-        defineArrayMember({type: 'webDesign'}),
-        defineArrayMember({type: 'bentoBoxSection'}),
-        defineArrayMember({type: 'AIAutomation'}),
-        defineArrayMember({type: 'tabPaneSection'}),
-      ],
+      of: registeredComponents,
       description: 'Add items to be displayed inside this container',
     }),
   ],

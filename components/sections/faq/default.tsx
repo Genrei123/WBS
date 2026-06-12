@@ -1,174 +1,89 @@
-import Link from "next/link";
-import { ReactNode } from "react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { useEffect, useRef, useState } from "react";
 
-import { siteConfig } from "@/config/site";
+const faqs = [
+  {
+    question: "What is this app, and how can it help me?",
+    answer:
+      "Our app uses AI to analyze your data and surface actionable insights, helping you make faster, smarter decisions without the manual work.",
+  },
+  {
+    question: "Is there a free trial available?",
+    answer:
+      "Yes! You can get started for free with no credit card required. Upgrade anytime to unlock additional features.",
+  },
+  {
+    question: "Which payment methods do you accept?",
+    answer:
+      "We accept all major credit cards, debit cards, and PayPal. Enterprise plans can also be paid via bank transfer.",
+  },
+  {
+    question: "How does the app keep my financial data secure?",
+    answer:
+      "All data is encrypted in transit and at rest using industry-standard protocols, and we never share your information with third parties.",
+  },
+  {
+    question: "I need help with the app. How can I contact support?",
+    answer:
+      "You can reach our support team 24/7 through live chat, email at support@example.com, or by submitting a ticket through the app. We typically respond within 2-4 hours during business days.",
+  },
+];
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "../../ui/accordion";
-import { Section } from "../../ui/section";
+export default function FAQ() {
+  interface Coordinates {
+    x: number;
+    y: number;
+  }
 
-interface FAQItemProps {
-  question: string;
-  answer: ReactNode;
-  value?: string;
-}
+  const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
+  const gradientRef = useRef<HTMLDivElement>(null);
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
 
-interface FAQProps {
-  title?: string;
-  items?: FAQItemProps[] | false;
-  className?: string;
-}
+    if (gradientRef.current) {
+      gradientRef.current.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(59,130,246,0.25), transparent 50%)`;
+    }
+  };
 
-export default function FAQ({
-  title = "Questions and Answers",
-  items = [
-    {
-      question:
-        "Why is building a great landing page critical for your business?",
-      answer: (
-        <>
-          <p className="text-muted-foreground mb-4 max-w-[640px] text-balance">
-            In today&apos;s AI-driven world, standing out is harder than ever.
-            While anyone can build a product, a professional landing page makes
-            the difference between success and failure.
-          </p>
-          <p className="text-muted-foreground mb-4 max-w-[640px] text-balance">
-            Launch UI helps you ship faster without compromising on quality.
-          </p>
-        </>
-      ),
-    },
-    {
-      question: "Why use Launch UI instead of a no-code tool?",
-      answer: (
-        <>
-          <p className="text-muted-foreground mb-4 max-w-[600px]">
-            No-code tools lock you into their ecosystem with recurring fees and
-            limited control. They often come with performance issues and make it
-            difficult to integrate with your product.
-          </p>
-          <p className="text-muted-foreground mb-4 max-w-[600px]">
-            You can&apos;t even change your hosting provider and basic things
-            like web analytics come as extra costs and paid add-ons.
-          </p>
-          <p className="text-muted-foreground mb-4 max-w-[600px]">
-            What might seem like a convenient solution today could paint you
-            into a corner tomorrow, limiting your ability to scale and adapt.
-            Launch UI gives you full control of your code while maintaining
-            professional quality.
-          </p>
-        </>
-      ),
-    },
-    {
-      question:
-        "How is Launch UI different from other component libraries and templates?",
-      answer: (
-        <>
-          <p className="text-muted-foreground mb-4 max-w-[580px]">
-            Launch UI stands out with premium design quality and delightful
-            touches of custom animations and illustrations.
-          </p>
-          <p className="text-muted-foreground mb-4 max-w-[580px]">
-            All components are carefully crafted to help position your product
-            as a professional tool, avoiding the generic template look.
-          </p>
-          <p className="text-muted-foreground mb-4 max-w-[640px] text-balance">
-            Unlike many libraries that rely on outdated CSS practices and old
-            dependencies, Launch UI is built with modern technologies and best
-            practices in mind.
-          </p>
-        </>
-      ),
-    },
-    {
-      question: 'What exactly does it mean that "The code is yours"?',
-      answer: (
-        <>
-          <p className="text-muted-foreground mb-4 max-w-[580px]">
-            The basic version of Launch UI is open-source and free forever,
-            under a do-whatever-you-want license.
-          </p>
-          <p className="text-muted-foreground mb-4 max-w-[580px]">
-            The pro version that contains more components and options is a
-            one-time purchase that gives you lifetime access to all current and
-            future content. Use it for unlimited personal and commercial
-            projects - no recurring fees or restrictions.
-          </p>
-          <p className="text-muted-foreground mb-4 max-w-[580px]">
-            For complete details about licensing and usage rights, check out{" "}
-            <Link
-              href={`${siteConfig.url}/pricing`}
-              className="text-foreground underline"
-            >
-              the pricing page
-            </Link>
-            .
-          </p>
-        </>
-      ),
-    },
-    {
-      question: "Are Figma files included?",
-      answer: (
-        <p className="text-muted-foreground mb-4 max-w-[580px]">
-          Yes! The complete Launch UI template is available for free on the{" "}
-          <Link
-            href="https://www.figma.com/community/file/1420131743903900629/launch-ui-landing-page-components-ui-kit"
-            className="text-foreground underline"
-          >
-            Figma community
-          </Link>
-          .
-        </p>
-      ),
-    },
-    {
-      question: "Can I get a discount?",
-      answer: (
-        <>
-          <p className="text-muted-foreground mb-4 max-w-[580px]">
-            Actually, yes! I&apos;m always actively looking for beta testers of
-            new features. If you are interested in exchanging feedback for a
-            discount, please contact me via{" "}
-            <a
-              href={siteConfig.links.email}
-              className="underline underline-offset-2"
-            >
-              email
-            </a>
-            .
-          </p>
-        </>
-      ),
-    },
-  ],
-  className,
-}: FAQProps) {
   return (
-    <Section className={className}>
-      <div className="max-w-container mx-auto flex flex-col items-center gap-8">
-        <h2 className="text-center text-3xl font-semibold sm:text-5xl">
-          {title}
-        </h2>
-        {items !== false && items.length > 0 && (
-          <Accordion type="single" collapsible className="w-full max-w-[800px]">
-            {items.map((item, index) => (
-              <AccordionItem
-                key={item.value ?? item.question}
-                value={item.value || `item-${index + 1}`}
-              >
-                <AccordionTrigger>{item.question}</AccordionTrigger>
-                <AccordionContent>{item.answer}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        )}
+    <section className="bg-background px-4 py-16">
+      <div className="mx-auto flex max-w-5xl flex-col items-center gap-4 text-center">
+        <span className="rounded-full border px-4 py-1 text-xs font-medium tracking-wide">FAQ</span>
+        <h2 className="text-3xl font-bold sm:text-4xl">Choose the Perfect Plan for Your AI Journey</h2>
+        <p className="text-muted-foreground max-w-xl text-sm sm:text-base">
+          Find the right plan to unlock AI-powered insights and streamline your workflow.
+        </p>
       </div>
-    </Section>
+
+      <div className="mx-auto mt-12 grid max-w-5xl gap-4 lg:grid-cols-[1fr_2fr]">
+        <div
+          ref={gradientRef}
+          className="bg-card relative flex flex-col justify-between overflow-hidden rounded-2xl border p-6"
+          onMouseMove={handleMouseMove}
+        >
+          <div className="flex flex-col gap-3">
+            <h3 className="text-lg font-semibold">Can&apos;t find answers?</h3>
+            <p className="text-muted-foreground text-sm">We&apos;re here to help! Get in touch with our support.</p>
+            <Button className="mt-2 w-fit cursor-pointer" size="sm">
+              Get Started - Free
+            </Button>
+          </div>
+        </div>
+
+        <Accordion type="single" collapsible defaultValue="item-4" className="flex flex-col gap-3">
+          {faqs.map((faq, index) => (
+            <AccordionItem key={index} value={`item-${index}`} className="bg-card rounded-xl border px-5">
+              <AccordionTrigger className="text-left text-sm font-semibold hover:no-underline sm:text-base">
+                {faq.question}
+              </AccordionTrigger>
+              <AccordionContent className="text-muted-foreground text-sm">{faq.answer}</AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </div>
+    </section>
   );
 }

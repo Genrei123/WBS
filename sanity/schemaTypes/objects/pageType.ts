@@ -1,5 +1,6 @@
 import {DocumentIcon} from '@sanity/icons'
 import {defineArrayMember, defineField, defineType} from 'sanity'
+import { registeredComponents } from '../registerComponents'
 
 export const pageType = defineType({
   name: 'page',
@@ -38,24 +39,7 @@ export const pageType = defineType({
       name: 'sections',
       title: 'Sections',
       type: 'array',
-      of: [
-        defineArrayMember({type: 'heroSection'}),
-        defineArrayMember({type: 'heroLanding'}),
-        defineArrayMember({type: 'richTextSection'}),
-        defineArrayMember({type: 'ctaSection'}),
-        defineArrayMember({type: 'imageSection'}),
-        defineArrayMember({type: 'cardButtonSection'}),
-        defineArrayMember({type: 'containerSection'}),
-        defineArrayMember({type: 'spacerSection'}),
-        defineArrayMember({type: 'pdfAutomation'}),
-        defineArrayMember({type: 'headlessPageBuilderDemo'}),
-        defineArrayMember({type: 'graphicDesign'}),
-        defineArrayMember({type: 'benefitGridSection'}),
-        defineArrayMember({type: 'webDesign'}),
-        defineArrayMember({type: 'bentoBoxSection'}),
-        defineArrayMember({type: 'tabPaneSection'}),
-        defineArrayMember({type: 'AIAutomation'}),
-      ],
+      of: registeredComponents,
       description: 'Add and reorder the sections rendered on this page.',
     }),
   ],

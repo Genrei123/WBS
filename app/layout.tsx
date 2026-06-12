@@ -13,7 +13,6 @@ import { sanityFetch, SanityLive } from "@/sanity/lib/live";
 import { footerQuery, navbarQuery, siteSettingsQuery } from "@/sanity/lib/queries";
 
 import { refreshAndRevalidate } from "./actions/refresh";
-import { siteConfig } from "../config/site";
 
 
 async function getSiteSettings() {
@@ -34,12 +33,12 @@ async function getFooter() {
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
 
-  const siteTitle = settings?.siteTitle || siteConfig.name;
-  const description = settings?.siteDescription || siteConfig.description;
-  const siteUrl = settings?.siteUrl || siteConfig.url;
+  const siteTitle = settings?.siteTitle;
+  const description = settings?.siteDescription;
+  const siteUrl = settings?.siteUrl;
   const ogImage = settings?.ogImage?.asset
     ? urlFor(settings.ogImage).width(1200).height(630).fit("crop").url()
-    : siteConfig.ogImage;
+    : "/favicon.svg";
   const logoUrl = settings?.logo?.asset
     ? urlFor(settings.logo).url()
     : "/favicon.svg";
