@@ -151,8 +151,7 @@ export default function BentoBoxSection({ eyebrow, title, description, bentoBoxe
                 <div
                   className={cn(
                     "relative z-10 flex h-full flex-col gap-2",
-                    isTextOnly ? "justify-center" : "",
-                    getTextAlignClasses(box.textAlign || (isTextOnly ? "left" : "left"))
+                    isTextOnly ? "justify-center text-center" : ""
                   )}
                 >
                   {box.title && (
@@ -169,7 +168,7 @@ export default function BentoBoxSection({ eyebrow, title, description, bentoBoxe
                     <p
                       className={cn(
                         "text-sm leading-relaxed text-black/60 dark:text-white/60",
-                        isTextOnly ? "max-w-md text-base dark:text-white/70" : "max-w-[85%]"
+                        isTextOnly ? "text-base dark:text-white/70" : "max-w-[85%]"
                       )}
                     >
                       {box.subtitle}
