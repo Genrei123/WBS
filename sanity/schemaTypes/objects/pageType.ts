@@ -40,6 +40,7 @@ export const pageType = defineType({
       type: 'array',
       of: [
         defineArrayMember({type: 'heroSection'}),
+        defineArrayMember({type: 'heroLanding'}),
         defineArrayMember({type: 'richTextSection'}),
         defineArrayMember({type: 'ctaSection'}),
         defineArrayMember({type: 'imageSection'}),

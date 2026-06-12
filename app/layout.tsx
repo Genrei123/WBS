@@ -113,7 +113,7 @@ export default async function RootLayout({
       lang="en"
       suppressHydrationWarning
     >
-      <body className={`${inter.variable} bg-background font-sans antialiased`}>
+      <body className={`${inter.variable} bg-background font-sans antialiased overflow-x-hidden`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

@@ -113,11 +113,15 @@ export const pageBySlugQuery = groq`
       paddingBottom,
       image{
         asset->{_id, url},
-        alt
+        alt,
+        hotspot,
+        crop
       },
       imageDark{
         asset->{_id, url},
-        alt
+        alt,
+        hotspot,
+        crop
       },
       description,
       link{
@@ -171,7 +175,13 @@ export const pageBySlugQuery = groq`
         description,
         ctaLabel,
         ctaHref,
-        image{
+        lightImage{
+          asset->{_id, url},
+          alt,
+          hotspot,
+          crop
+        },
+        darkImage{
           asset->{_id, url},
           alt,
           hotspot,

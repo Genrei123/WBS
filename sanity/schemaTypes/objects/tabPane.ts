@@ -9,6 +9,26 @@ export const tabPaneSectionType = defineType({
   icon: BlockElementIcon,
   fields: [
     defineField({
+      name: "title",
+      title: "Title",
+      type: "string",
+    }),
+    defineField({
+      name: "titleColor",
+      title: "Title Color",
+      type: "string",
+      options: {
+        list: [
+          {title: 'Primary', value: 'primary'},
+          {title: 'Secondary', value: 'secondary'},
+          {title: 'Accent', value: 'accent'},
+          {title: 'Default', value: 'default'},
+        ],
+        layout: 'dropdown',
+      },
+      initialValue: 'primary',
+    }),
+    defineField({
       name: "tabs",
       title: "Tabs",
       type: "array",
@@ -53,7 +73,34 @@ export const tabPaneSectionType = defineType({
             }),
             defineField({
               name: "image",
-              title: "Tab Image",
+              title: "Image (Deprecated - use Light/Dark images)",
+              type: "image",
+              hidden: true,
+              options: { hotspot: true },
+              fields: [
+                defineField({
+                  name: "alt",
+                  title: "Alt Text",
+                  type: "string",
+                }),
+              ],
+            }),
+            defineField({
+              name: "lightImage",
+              title: "Light Mode Image",
+              type: "image",
+              options: { hotspot: true },
+              fields: [
+                defineField({
+                  name: "alt",
+                  title: "Alt Text",
+                  type: "string",
+                }),
+              ],
+            }),
+            defineField({
+              name: "darkImage",
+              title: "Dark Mode Image",
               type: "image",
               options: { hotspot: true },
               fields: [
@@ -72,8 +119,8 @@ export const tabPaneSectionType = defineType({
   preview: {
     select: {
       title: "tabs[0].title",
-      media: "tabs[0].image",
-      alt: "tabs[0].image.alt",
+      media: "tabs[0].lightImage",
+      alt: "tabs[0].lightImage.alt",
     },
     prepare({title, media, alt}) {
       return {
