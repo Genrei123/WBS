@@ -168,6 +168,7 @@ export default function Navigation({
                     href={item.href || "/"}
                     target={isExternal(item.href) ? "_blank" : undefined}
                     rel={isExternal(item.href) ? "noopener noreferrer" : undefined}
+                    className="flex-row gap-0! content-start"
                   >
                         {item.icon ? (
                           <span className="mr-2 inline-block align-middle text-muted-foreground">

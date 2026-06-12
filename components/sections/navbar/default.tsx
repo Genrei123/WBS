@@ -11,11 +11,7 @@ import LaunchUI from "../../logos/launch-ui";
 import { Button, buttonVariants } from "../../ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../ui/accordion";
 import { ModeToggle } from "../../ui/mode-toggle";
-import {
-  Navbar as NavbarComponent,
-  NavbarLeft,
-  NavbarRight,
-} from "../../ui/navbar";
+import { Navbar as NavbarComponent, NavbarLeft, NavbarRight } from "../../ui/navbar";
 import Navigation from "../../ui/navigation";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "../../ui/sheet";
 
@@ -80,15 +76,15 @@ interface NavbarProps {
 // Helper function to convert link data to href
 const getLinkHref = (link?: LinkData): string => {
   if (!link) return "/";
-  
+
   if (link.linkType === "internal" && link.internalPage?.slug?.current) {
     return `/${link.internalPage.slug.current}`;
   }
-  
+
   if (link.linkType === "external" && link.externalUrl) {
     return link.externalUrl;
   }
-  
+
   return "/";
 };
 
@@ -97,12 +93,7 @@ const isExternalLink = (link?: LinkData): boolean => {
   return link?.linkType === "external" && !!link?.externalUrl;
 };
 
-export default function Navbar({
-  data,
-  brandName,
-  logo,
-  className,
-}: NavbarProps) {
+export default function Navbar({ data, brandName, logo, className }: NavbarProps) {
   const defaultName = "Launch UI";
   const name = brandName || defaultName;
   const homeLink = data?.homeLink;
@@ -112,15 +103,12 @@ export default function Navbar({
   const homeUrl = getLinkHref(homeLink);
 
   // Render logo
-  const logoElement = logo && logo.asset ? (
-    <img 
-      src={urlFor(logo).width(40).fit("max").url()}
-      alt={logo.alt || name} 
-      className="h-8 w-auto"
-    />
-  ) : (
-    <LaunchUI />
-  );
+  const logoElement =
+    logo && logo.asset ? (
+      <img src={urlFor(logo).width(40).fit("max").url()} alt={logo.alt || name} className="h-8 w-auto" />
+    ) : (
+      <LaunchUI />
+    );
 
   // Map navigation items to Navigation component structure
   const navStructure = navigationItems.map((item) => ({
@@ -128,23 +116,26 @@ export default function Navbar({
     href: getLinkHref(item.mainLink),
     hasDropdown: item.dropdownVariant !== "none" && item.dropdownVariant !== undefined,
     dropdownVariant: item.dropdownVariant,
-    dropdownItems: item.dropdownItems?.map(di => ({
-      text: di.label,
-      href: getLinkHref({
-        linkType: di.linkType,
-        internalPage: di.internalPage,
-        externalUrl: di.externalUrl,
-      }),
-      icon: di.icon,
-    })) || [],
-    featuredItem: item.featuredItem ? {
-      text: item.featuredItem.label,
-      href: getLinkHref({
-        linkType: item.featuredItem.linkType,
-        internalPage: item.featuredItem.internalPage,
-        externalUrl: item.featuredItem.externalUrl,
-      }),
-    } : undefined,
+    dropdownItems:
+      item.dropdownItems?.map((di) => ({
+        text: di.label,
+        href: getLinkHref({
+          linkType: di.linkType,
+          internalPage: di.internalPage,
+          externalUrl: di.externalUrl,
+        }),
+        icon: di.icon,
+      })) || [],
+    featuredItem: item.featuredItem
+      ? {
+          text: item.featuredItem.label,
+          href: getLinkHref({
+            linkType: item.featuredItem.linkType,
+            internalPage: item.featuredItem.internalPage,
+            externalUrl: item.featuredItem.externalUrl,
+          }),
+        }
+      : undefined,
     icon: item.icon,
     iconUrl: item.iconUrl,
   }));
@@ -155,31 +146,36 @@ export default function Navbar({
       <div className="max-w-container relative mx-auto">
         <NavbarComponent>
           <NavbarLeft>
-            <a
-              href={homeUrl}
-              className="flex items-center gap-2 text-xl font-bold"
-            >
+            <a href={homeUrl} className="flex items-center gap-2 text-xl font-bold">
               {logoElement}
               {name}
             </a>
-            {navigationItems.length > 0 && <Navigation structure={navStructure} />}
           </NavbarLeft>
+          {navigationItems.length > 0 && <Navigation structure={navStructure} />}
           <NavbarRight>
             <ModeToggle />
             {actions.map((action) => (
               <Button
                 key={`${action.label}`}
-                variant={action.variant as VariantProps<typeof buttonVariants>["variant"] || "default"}
+                variant={(action.variant as VariantProps<typeof buttonVariants>["variant"]) || "default"}
                 asChild
               >
-                <a 
+                <a
                   href={getLinkHref({
                     linkType: action.linkType,
                     internalPage: action.internalPage,
                     externalUrl: action.externalUrl,
                   })}
-                  target={isExternalLink({linkType: action.linkType, externalUrl: action.externalUrl}) ? "_blank" : undefined}
-                  rel={isExternalLink({linkType: action.linkType, externalUrl: action.externalUrl}) ? "noopener noreferrer" : undefined}
+                  target={
+                    isExternalLink({ linkType: action.linkType, externalUrl: action.externalUrl })
+                      ? "_blank"
+                      : undefined
+                  }
+                  rel={
+                    isExternalLink({ linkType: action.linkType, externalUrl: action.externalUrl })
+                      ? "noopener noreferrer"
+                      : undefined
+                  }
                 >
                   {action.icon ? (
                     <span className="mr-2 inline-block align-middle text-current">
@@ -196,11 +192,7 @@ export default function Navbar({
             ))}
             <Sheet>
               <SheetTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="shrink-0 md:hidden"
-                >
+                <Button variant="ghost" size="icon" className="shrink-0 md:hidden">
                   <Menu className="size-5" />
                   <span className="sr-only">Toggle navigation menu</span>
                 </Button>
@@ -208,10 +200,7 @@ export default function Navbar({
               <SheetContent side="right">
                 <SheetTitle className="sr-only">Navigation menu</SheetTitle>
                 <nav className="grid gap-4 text-lg font-medium">
-                  <a
-                    href={homeUrl}
-                    className="flex items-center gap-2 text-xl font-bold"
-                  >
+                  <a href={homeUrl} className="flex items-center gap-2 text-xl font-bold">
                     <span>{name}</span>
                   </a>
                   <Accordion type="multiple" className="grid gap-2">
@@ -230,7 +219,7 @@ export default function Navbar({
                               className="text-muted-foreground hover:text-foreground block"
                             >
                               {link.icon ? (
-                                <span className="mr-2 inline-block align-middle text-muted-foreground">
+                                <span className="text-muted-foreground mr-2 inline-block align-middle">
                                   <SocialIcon name={link.icon} />
                                 </span>
                               ) : null}
@@ -255,7 +244,7 @@ export default function Navbar({
                                   className="text-muted-foreground hover:text-foreground text-sm"
                                 >
                                   {link.icon ? (
-                                    <span className="mr-2 inline-block align-middle text-muted-foreground">
+                                    <span className="text-muted-foreground mr-2 inline-block align-middle">
                                       <SocialIcon name={link.icon} />
                                     </span>
                                   ) : null}
@@ -283,7 +272,7 @@ export default function Navbar({
                                     className="text-muted-foreground hover:text-foreground text-sm"
                                   >
                                     {dropItem.icon ? (
-                                      <span className="mr-2 inline-block align-middle text-muted-foreground">
+                                      <span className="text-muted-foreground mr-2 inline-block align-middle">
                                         <SocialIcon name={dropItem.icon} />
                                       </span>
                                     ) : null}
@@ -291,30 +280,32 @@ export default function Navbar({
                                   </a>
                                 );
                               })}
-                              {link.featuredItem ? (() => {
-                                const featuredHref = getLinkHref({
-                                  linkType: link.featuredItem.linkType,
-                                  internalPage: link.featuredItem.internalPage,
-                                  externalUrl: link.featuredItem.externalUrl,
-                                });
-                                const featuredExternal = isExternalLink({
-                                  linkType: link.featuredItem.linkType,
-                                  internalPage: link.featuredItem.internalPage,
-                                  externalUrl: link.featuredItem.externalUrl,
-                                });
+                              {link.featuredItem
+                                ? (() => {
+                                    const featuredHref = getLinkHref({
+                                      linkType: link.featuredItem.linkType,
+                                      internalPage: link.featuredItem.internalPage,
+                                      externalUrl: link.featuredItem.externalUrl,
+                                    });
+                                    const featuredExternal = isExternalLink({
+                                      linkType: link.featuredItem.linkType,
+                                      internalPage: link.featuredItem.internalPage,
+                                      externalUrl: link.featuredItem.externalUrl,
+                                    });
 
-                                return (
-                                  <Button asChild className="mt-1 w-full">
-                                    <a
-                                      href={featuredHref}
-                                      target={featuredExternal ? "_blank" : undefined}
-                                      rel={featuredExternal ? "noopener noreferrer" : undefined}
-                                    >
-                                      {link.featuredItem.label}
-                                    </a>
-                                  </Button>
-                                );
-                              })() : null}
+                                    return (
+                                      <Button asChild className="mt-1 w-full">
+                                        <a
+                                          href={featuredHref}
+                                          target={featuredExternal ? "_blank" : undefined}
+                                          rel={featuredExternal ? "noopener noreferrer" : undefined}
+                                        >
+                                          {link.featuredItem.label}
+                                        </a>
+                                      </Button>
+                                    );
+                                  })()
+                                : null}
                             </div>
                           </AccordionContent>
                         </AccordionItem>
@@ -326,7 +317,7 @@ export default function Navbar({
                       {actions.map((action) => (
                         <Button
                           key={`${action.label}`}
-                          variant={action.variant as VariantProps<typeof buttonVariants>["variant"] || "default"}
+                          variant={(action.variant as VariantProps<typeof buttonVariants>["variant"]) || "default"}
                           asChild
                         >
                           <a
@@ -335,8 +326,16 @@ export default function Navbar({
                               internalPage: action.internalPage,
                               externalUrl: action.externalUrl,
                             })}
-                            target={isExternalLink({ linkType: action.linkType, externalUrl: action.externalUrl }) ? "_blank" : undefined}
-                            rel={isExternalLink({ linkType: action.linkType, externalUrl: action.externalUrl }) ? "noopener noreferrer" : undefined}
+                            target={
+                              isExternalLink({ linkType: action.linkType, externalUrl: action.externalUrl })
+                                ? "_blank"
+                                : undefined
+                            }
+                            rel={
+                              isExternalLink({ linkType: action.linkType, externalUrl: action.externalUrl })
+                                ? "noopener noreferrer"
+                                : undefined
+                            }
                           >
                             {action.label}
                           </a>

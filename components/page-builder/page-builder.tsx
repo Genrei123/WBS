@@ -651,8 +651,6 @@ export function PageBuilder({
             );
 
           case "tabPaneSection":
-              console.log("tabPaneSection data:", JSON.stringify(section, null, 2));
-
             return (
               
               <section
