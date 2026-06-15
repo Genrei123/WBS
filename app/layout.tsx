@@ -14,7 +14,6 @@ import { footerQuery, navbarQuery, siteSettingsQuery } from "@/sanity/lib/querie
 
 import { refreshAndRevalidate } from "./actions/refresh";
 
-
 async function getSiteSettings() {
   const { data } = await sanityFetch({ query: siteSettingsQuery });
   return data;
@@ -39,9 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const ogImage = settings?.ogImage?.asset
     ? urlFor(settings.ogImage).width(1200).height(630).fit("crop").url()
     : "/favicon.svg";
-  const logoUrl = settings?.logo?.asset
-    ? urlFor(settings.logo).url()
-    : "/favicon.svg";
+  const logoUrl = settings?.logo?.asset ? urlFor(settings.logo).url() : "/favicon.svg";
 
   return {
     icons: {
@@ -55,15 +52,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     metadataBase: new URL(siteUrl),
     description,
-    keywords: [
-      "Landing page template",
-      "Components",
-      "Shadcn",
-      "Next.js",
-      "React",
-      "Tailwind CSS",
-      "Radix UI",
-    ],
+    keywords: ["Landing page template", "Components", "Shadcn", "Next.js", "React", "Tailwind CSS", "Radix UI"],
     openGraph: {
       type: "website",
       locale: "en_US",
@@ -108,30 +97,14 @@ export default async function RootLayout({
   const footerData = await getFooter();
 
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-    >
-      <body className={`${inter.variable} bg-background font-sans antialiased overflow-x-hidden`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <header className="fixed top-0 left-0 w-full z-50 backdrop-blur">
-            <Navbar
-              data={navbarData || undefined}
-              brandName={siteSettings?.brandName}
-              logo={siteSettings?.logo}
-            />
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.variable} bg-background overflow-x-hidden font-sans antialiased`}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+          <header className="fixed top-0 left-0 z-50 w-full backdrop-blur">
+            <Navbar data={navbarData || undefined} brandName={siteSettings?.brandName} logo={siteSettings?.logo} />
           </header>
           {children}
-          <FooterSection
-            data={footerData || undefined}
-            brandName={siteSettings?.brandName}
-            logo={siteSettings?.logo}
-          />
+          <FooterSection data={footerData || undefined} brandName={siteSettings?.brandName} logo={siteSettings?.logo} />
           {isEnabled && (
             <>
               <VisualEditing />

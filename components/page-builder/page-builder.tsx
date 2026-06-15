@@ -61,8 +61,9 @@ type PageSection = {
     url?: string;
   }>;
   link?: {
-    linkType?: "internal" | "external";
+    linkType?: "internal" | "external" | "blog";
     internalPage?: { slug?: { current?: string } };
+    blogPage?: { slug?: { current?: string } };
     externalUrl?: string;
   };
   headerLayout?: "center" | "left" | "right" | "split";
@@ -426,7 +427,12 @@ export function PageBuilder({
             const cardImgSrc = section.image?.asset
               ? urlFor(section.image).width(600).height(400).fit("crop").url()
               : null;
-            const cardHref = getLinkHref(section.link);
+
+            const cardHref =
+              section.link?.linkType === "blog"
+                ? `/${section.link?.blogPage?.slug?.current}`
+                : getLinkHref(section.link);
+
             const isExternal = section.link?.linkType === "external";
 
             return (

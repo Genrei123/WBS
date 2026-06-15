@@ -15,4 +15,5 @@ export const registeredComponents = [
   defineArrayMember({ type: "tabPaneSection" }),
   defineArrayMember({ type: "pricingSection" }),
   defineArrayMember({ type: "faqSection" }),
+  defineArrayMember({ type: "containerSection" }),
 ];
